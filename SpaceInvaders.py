@@ -18,7 +18,7 @@ GOLD = (230, 215, 0)
 font_comic = pygame.font.SysFont('Comic Sans MS', 40)
 font_times = pygame.font.SysFont('Times New Roman', 40)
 
-screen = pygame.display.set_mode((800,800)) #Initialzing display
+screen = pygame.display.set_mode((800,650)) #Initialzing display
 pygame.display.set_caption('SPACE INVADER') 
 clock = pygame.time.Clock()
 
@@ -37,8 +37,14 @@ def WelcomeScreen(): #initial screen before the game begins
 	mouse_pos=pygame.mouse.get_pos()
 	mouse_click=pygame.mouse.get_pressed()
 	screen.fill(GREY)
+
+	logo = pygame.image.load('space-invaders-logo_transparent.png')
+	screen.blit(logo,(30,80))
+
+
+
 	if mouse_pos[0] < 535 and mouse_pos[0] > 270 and mouse_pos[1] < 480 and mouse_pos[1] > 400:#If mouse hovers over button
-		pygame.draw.rect(screen, GREEN,(270,400,265,80))
+		pygame.draw.rect(screen, RED,(270,400,265,80))
 		if mouse_click[0]:
 			game_state = True
 			Game()
@@ -46,7 +52,7 @@ def WelcomeScreen(): #initial screen before the game begins
 		pygame.draw.rect(screen,BLUE,(270,400,265,80))
 
 	text_welcome = font_times.render('START GAME', False, WHITE)
-	screen.blit(text_welcome,(280,410))
+	screen.blit(text_welcome,(280,417))
 
 def Game(): #The game has begin... initialize all classes and display
 	pass
