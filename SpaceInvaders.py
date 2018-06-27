@@ -1,6 +1,7 @@
 import pygame
 import time
 import random
+from pygame.locals import *
 
 #Initialze pygame
 pygame.init()
@@ -62,6 +63,29 @@ def Left(): #Move spaceship towards left
 
 def Right(): #move spaceship towards right
 	pass
+
+# Spaceship object and starting coordinates
+ship = font_comic.render('Ship',False,GOLD) # This line has to modified to get spaceship object
+ship_y = screen.get_height() - ship.get_height()
+ship_x = screen.get_width()/2 - ship.get_width()/2
+# Function to display Spaceship
+def Spaceship(ship,ship_x,ship_y):
+	screen.blit(ship,(ship_x,ship_y))
+
+# Invader Object and Class
+invader = font_comic.render('Invader',False,RED) # This line to be replaced by Invader image
+
+class Invader:
+	invader_x = random.randrange(0,screen.get_width())
+	invader_y = random.randrange(0,400)
+	def __init__(self,invader,invader_x,invader_y):
+		self.invader = invader
+		
+	def get_invader(self):
+		screen.blit(self.invader,(self.invader_x,self.invader_y))
+
+
+
 
 ##MAIN
 WelcomeScreen() ## contains initial screen
