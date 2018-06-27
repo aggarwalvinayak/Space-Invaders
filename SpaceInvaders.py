@@ -3,6 +3,7 @@ import time
 import random
 from pygame.locals import *
 
+
 #Initialze pygame
 pygame.init()
 
@@ -44,7 +45,7 @@ def WelcomeScreen(): #initial screen before the game begins
 
 
 
-	if mouse_pos[0] < 535 and mouse_pos[0] > 270 and mouse_pos[1] < 480 and mouse_pos[1] > 400:#If mouse hovers over button
+	if mouse_pos[0] < 535 and mouse_pos[0] > 270 and mouse_pos[1] < 480 and mouse_pos[1] > 400:
 		pygame.draw.rect(screen, RED,(270,400,265,80))
 		if mouse_click[0]:
 			game_state = True
@@ -56,12 +57,33 @@ def WelcomeScreen(): #initial screen before the game begins
 	screen.blit(text_welcome,(280,417))
 
 def Game(): #The game has begin... initialize all classes and display
+	global score,highest_score
+
+	background = pygame.image.load('background.png')
+	screen.blit(background,(0,0))
+	text_score = font_comic.render('SCORE:', False, GOLD)
+	screen.blit(text_score,(150,25))
+	text_score = font_comic.render(str(score), False, ORANGE)
+	screen.blit(text_score,(270,25))
+	text_score = font_comic.render('HIGH SCORE:', False, GOLD)
+	screen.blit(text_score,(430,25))
+	text_score = font_comic.render(str(highest_score), False, ORANGE)
+	screen.blit(text_score,(630,25))
+
+
+	#display all objects 
 	pass
 
-def Left(): #Move spaceship towards left
+def Left_press(): #increase velocity
 	pass
 
-def Right(): #move spaceship towards right
+def Right_press(): #increase velocity
+	pass
+
+def Release_arrowkey(): #velocity=0
+	pass
+
+def Fire_Spaceship(): #release a bullet from same x coordinate upwards
 	pass
 
 # Spaceship object and starting coordinates
@@ -100,17 +122,20 @@ while not quit:
 	for event in pygame.event.get():       
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_LEFT:
-				Left()
+				Left_press()
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_RIGHT:
-				Right()
+				Right_press()
+		if event.type == pygame.KEYUP:
+			if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+				Release_arrowkey()
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_SPACE:
 				Fire_Spaceship()
 		if event.type == pygame.QUIT:
 			quit = True
     
-	clock.tick(10) #Sets FPS of the game
+	clock.tick(20) #Sets FPS of the game
 	pygame.display.update()
 
 pygame.quit()
