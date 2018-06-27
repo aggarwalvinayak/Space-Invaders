@@ -138,6 +138,18 @@ class Invader3:
 		self.score += 30
 		return self.score
 
+# Bullet Class
+bullet = font_comic.render('Bullet',False,BLACK)
+
+class Bullet:
+	bullet_x = ship_x + ship.get_width()/2
+	bullet_y = ship_y
+
+	def __init__(self,bullet):
+		self.bullet = bullet
+
+	def Get_Bullet(self):
+		screen.blit(self.bullet,(self.bullet_x,self.bullet_y))
 
 ##MAIN
 WelcomeScreen() ## contains initial screen
