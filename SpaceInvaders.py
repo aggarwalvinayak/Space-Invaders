@@ -57,7 +57,7 @@ def WelcomeScreen(): #initial screen before the game begins
 	screen.blit(text_welcome,(280,417))
 
 def Game(): #The game has begin... initialize all classes and display
-	global score,highest_score
+	global score,highest_score,ship,ship_y,ship_x
 
 	background = pygame.image.load('background.png')
 	screen.blit(background,(0,0))
@@ -69,29 +69,48 @@ def Game(): #The game has begin... initialize all classes and display
 	screen.blit(text_score,(430,25))
 	text_score = font_comic.render(str(highest_score), False, ORANGE)
 	screen.blit(text_score,(630,25))
+	Spaceship()
 
 
 	#display all objects 
 	pass
 
 def Left_press(): #increase velocity
+	global vel_ship
+	vel_ship=-10
 	pass
 
 def Right_press(): #increase velocity
+	global vel_ship
+	vel_ship=10
 	pass
 
 def Release_arrowkey(): #velocity=0
+	global vel_ship
+	vel_ship=0
 	pass
 
 def Fire_Spaceship(): #release a bullet from same x coordinate upwards
 	pass
 
-# Spaceship object and starting coordinates
-ship = font_comic.render('Ship',False,GOLD) # This line has to modified to get spaceship object
-ship_y = screen.get_height() - ship.get_height()
-ship_x = screen.get_width()/2 - ship.get_width()/2
-# Function to display Spaceship
-def Spaceship(ship,ship_x,ship_y):
+def initial():
+	global ship,ship_x,ship_y,vel_ship
+	# Spaceship object and starting coordinates
+	ship = font_comic.render('Ship',False,GOLD) # This line has to modified to get spaceship object
+	ship_y = screen.get_height() - 50
+	ship_x = screen.get_width()/2 - ship.get_width()/2
+	vel_ship=0
+
+# Function to change positon and display Spaceship
+def Spaceship():
+	global vel_ship,ship,ship_y,ship_x
+	ship_x+=vel_ship
+	if ship_x <= 0 + ship.get_width()/2: #stop if hits left wall
+		ship_x-=vel_ship
+		vel_ship=0
+	if ship_x >= 800 - ship.get_width()/2: #stop if hits right wall
+		ship_x-=vel_ship
+		vel_ship=0
 	screen.blit(ship,(ship_x,ship_y))
 
 # Invader Class
@@ -155,6 +174,7 @@ class Bullet:
 WelcomeScreen() ## contains initial screen
 game_state=False
 quit=False
+initial()
 while not quit:
 	if not game_state:
 		WelcomeScreen()
