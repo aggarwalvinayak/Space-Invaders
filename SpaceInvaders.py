@@ -3,6 +3,7 @@ import time
 import random
 from pygame.locals import *
 
+
 #Initialze pygame
 pygame.init()
 
@@ -112,20 +113,62 @@ def Spaceship():
 		vel_ship=0
 	screen.blit(ship,(ship_x,ship_y))
 
-# Invader Object and Class
-invader = font_comic.render('Invader',False,RED) # This line to be replaced by Invader image
+# Invader Class
+invader1 = font_comic.render('Invader1',False,RED) # This line to be replaced by Invader image
+invader2 = font_comic.render('Invader2',False,GREY) # This line to be replaced by Invader image
+invader3 = font_comic.render('Invader3',False,BLUE) # This line to be replaced by Invader image
 
-class Invader:
-	invader_x = random.randrange(0,screen.get_width())
-	invader_y = random.randrange(0,400)
-	def __init__(self,invader,invader_x,invader_y):
-		self.invader = invader
-		
-	def get_invader(self):
-		screen.blit(self.invader,(self.invader_x,self.invader_y))
+class Invader1:
+	def __init__(self,invader1,invader_x,invader1_y,score):
+		self.invader1 = invader1
+		self.invader_x = invader_x
+		self.invader1_y = invader1_y
+	
+	def Get_Invader(self):
+		screen.blit(self.invader1,(self.invader_x,self.invader1_y))
 
+	def Invader_Attack(self):
+		self.score += 10
+		return self.score
 
+class Invader2:
+	def __init__(self,invader2,invader_x,invader2_y,score):
+		self.invader2 = invader2
+		self.invader_x = invader_x
+		self.invader2_y = invader2_y
+	
+	def Get_Invader(self):
+		screen.blit(self.invader2,(self.invader_x,self.invader2_y))
 
+	def Invader_Attack(self):
+		self.score += 20
+		return self.score
+
+class Invader3:
+	def __init__(self,invader3,invader_x,invader3_y,score):
+		self.invader3 = invader3
+		self.invader_x = invader_x
+		self.invader3_y = invader3_y
+	
+	def Get_Invader(self):
+		screen.blit(self.invader3,(self.invader_x,self.invader3_y))
+
+	def Invader_Attack(self):
+		self.score += 30
+		return self.score
+
+# Bullet Class
+bullet = font_comic.render('Bullet',False,BLACK)
+
+class Bullet:
+	bullet_x = ship_x + ship.get_width()/2
+	bullet_y = ship_y
+
+	def __init__(self,bullet):
+		self.bullet = bullet
+
+	def Get_Bullet(self):
+		screen.blit(self.bullet,(self.bullet_x,self.bullet_y))
 
 ##MAIN
 WelcomeScreen() ## contains initial screen
