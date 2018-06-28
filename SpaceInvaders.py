@@ -261,7 +261,7 @@ class Invader_Mystery: #needs to be attacked thrice to be killed and score =100
 
 # Bullet Class
 
-bullet = pygame.image.load('Bullet.png')
+bullet = pygame.image.load('bullet.jpg')
 i1fire = pygame.image.load('i1fire.png')
 i2fire = pygame.image.load('i2fire.png')
 i3fire = pygame.image.load('i3fire.png')
