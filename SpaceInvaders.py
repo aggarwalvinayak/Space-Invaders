@@ -16,9 +16,11 @@ RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 ORANGE = (243, 156, 18)
 GOLD = (230, 215, 0)
+YELLOW = (255,255,0)
 
 font_comic = pygame.font.SysFont('Comic Sans MS', 40)
 font_times = pygame.font.SysFont('Times New Roman', 40)
+font_points = pygame.font.SysFont('Times New Roman', 20)
 
 screen = pygame.display.set_mode((800,650)) #Initialzing display
 pygame.display.set_caption('SPACE INVADER') 
@@ -41,21 +43,35 @@ def WelcomeScreen(): #initial screen before the game begins
 	screen.fill(GREY)
 
 	logo = pygame.image.load('space-invaders-logo_transparent.png')
-	screen.blit(logo,(30,80))
+	screen.blit(logo,(30,40))
+
+	screen.blit(invader1,(150,550))
+	points1 = font_points.render(':- 10 POINTS', False, BLUE)
+	screen.blit(points1,(180,550))
+	screen.blit(invader2,(450,550))
+	points1 = font_points.render(':- 20 POINTS', False, BLUE)
+	screen.blit(points1,(480,550))
+	screen.blit(invader3,(150,600))
+	points1 = font_points.render(':- 30 POINTS', False, BLUE)
+	screen.blit(points1,(180,600))
+	screen.blit(invaderM,(450,600))
+	points1 = font_points.render(':- Mystery (Hit Thrice)', False, BLUE)
+	screen.blit(points1,(480,600))
 
 
-
-	if mouse_pos[0] < 535 and mouse_pos[0] > 270 and mouse_pos[1] < 480 and mouse_pos[1] > 400:
-		pygame.draw.rect(screen, RED,(270,400,265,80))
+	if ((mouse_pos[0]-400)**2 + (mouse_pos[1]-400)**2) <=8100 :
+		pygame.draw.circle(screen, RED,(400,400),90)
 		if mouse_click[0]:
 			game_state = True
 			Game()
 			
 	else:
-		pygame.draw.rect(screen,BLUE,(270,400,265,80))
+		pygame.draw.circle(screen, BLUE,(400,400),90)
 
-	text_welcome = font_times.render('START GAME', False, WHITE)
-	screen.blit(text_welcome,(280,417))
+	text_welcome = font_times.render('START', False, WHITE)
+	screen.blit(text_welcome,(340,360))
+	text_welcome = font_times.render('GAME', False, WHITE)
+	screen.blit(text_welcome,(340,400))
 
 def Game(): #The game has begin... initialize all classes and display
 	global score,highest_score,ship,ship_y,ship_x,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys
@@ -68,6 +84,11 @@ def Game(): #The game has begin... initialize all classes and display
 	screen.blit(text_score,(270,25))
 	text_score = font_comic.render('HIGH SCORE:', False, GOLD)
 	screen.blit(text_score,(430,25))
+	if highest_score<score:
+		highest_score=score
+		fo=open('highscore.txt','w')
+		fo.write(str(highest_score))
+		fo.close()
 	text_score = font_comic.render(str(highest_score), False, ORANGE)
 	screen.blit(text_score,(630,25))
 	Spaceship()
@@ -85,8 +106,7 @@ def Game(): #The game has begin... initialize all classes and display
 			invader3_list[i].Get_Invader()
 	if invader_mys.isAlive:
 			invader_mys.Get_Invader()
-	Move_Invader()
-	#display all objects 
+	Move_Invader()#display all objects 
 	pass
 
 def Left_press(): #increase velocity
@@ -103,6 +123,31 @@ def Release_arrowkey(): #velocity=0
 	global vel_ship
 	vel_ship=0
 	pass
+
+def Win_message(): ##Increase size of font and positioning correctly left
+	global quit
+	mouse=pygame.mouse.get_pos()
+	click=pygame.mouse.get_pressed()
+	screen.fill(GOLD)
+	myfont_win = pygame.font.SysFont('Comic Sans MS', 120)
+	col=random.choice((1,2,3))
+	if col==1:
+		textsurface=myfont_win.render("YOU WON..!!",False, BLUE)
+		screen.blit(textsurface,(190,200)) 
+	if col==2:
+		textsurface=myfont_win.render("YOU WON..!!",False, ORANGE)
+		screen.blit(textsurface,(190,200))
+	if col==3:
+		textsurface=myfont_win.render("YOU WON..!!",False, RED)
+		screen.blit(textsurface,(190,200))
+	if mouse[0] < 375 and mouse[0] > 200 and mouse[1] < 450 and mouse[1] > 400:
+		pygame.draw.rect(screen, GREEN,(200, 400,125,50))
+		if click[0]==1:
+			quit=True
+	else:
+		pygame.draw.rect(screen,RED,(200,400,125,50))   
+	textsurface = myfont.render('QUIT', False, WHITE)
+	screen.blit(textsurface,(220,410)) 
 
 def Fire_Spaceship(): #release a bullet from same x coordinate upwards
 	pass
@@ -137,7 +182,7 @@ def Spaceship():
 
 # Invader Class
 invader1 = font_comic.render('I1',False,RED) # This line to be replaced by Invader image
-invader2 = font_comic.render('I2',False,GREY) # This line to be replaced by Invader image
+invader2 = font_comic.render('I2',False,GOLD) # This line to be replaced by Invader image
 invader3 = font_comic.render('I3',False,BLUE) # This line to be replaced by Invader image
 invaderM = font_comic.render('I3',False,BLUE)
 
@@ -319,7 +364,7 @@ while not quit:
 				Fire_Spaceship()
 		if event.type == pygame.QUIT:
 			quit = True
-    
+	
 	clock.tick(20) #Sets FPS of the game
 	pygame.display.update()
 
