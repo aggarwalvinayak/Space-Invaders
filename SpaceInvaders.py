@@ -162,7 +162,7 @@ def Fire_Spaceship(): #release a bullet from same x coordinate upwards
 def initial():
 	global ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4
 	# Spaceship object and starting coordinates
-	ship = font_comic.render('Ship',False,GOLD) # This line has to modified to get spaceship object
+	ship = pygame.image.load('tank.png').convert_alpha()
 	ship_y = screen.get_height() - 50
 	ship_x = screen.get_width()/2 - ship.get_width()/2
 	vel_ship=0
@@ -191,10 +191,10 @@ def Spaceship():
 	screen.blit(ship,(ship_x,ship_y))
 
 # Invader Class
-invader1 = font_comic.render('I1',False,RED) # This line to be replaced by Invader image
-invader2 = font_comic.render('I2',False,GOLD) # This line to be replaced by Invader image
-invader3 = font_comic.render('I3',False,BLUE) # This line to be replaced by Invader image
-invaderM = font_comic.render('I3',False,BLUE)
+invader1 = pygame.image.load('i1.png').convert_alpha()
+invader2 = pygame.image.load('i3.png').convert_alpha()  
+invader3 = pygame.image.load('i2.png').convert_alpha()  
+invaderM = pygame.image.load('i4.png').convert_alpha()
 
 class Invader1: #score=10
 	global score
@@ -261,7 +261,12 @@ class Invader_Mystery: #needs to be attacked thrice to be killed and score =100
 
 # Bullet Class
 
-bullet = font_comic.render('Bullet',False,BLACK)
+bullet = pygame.image.load('Bullet.png')
+i1fire = pygame.image.load('i1fire.png')
+i2fire = pygame.image.load('i2fire.png')
+i3fire = pygame.image.load('i3fire.png')
+i4fire = pygame.image.load('i4fire.png')
+
 class Bullet:
 	global ship_x,ship_y
 	def __init__(self,bullet):
