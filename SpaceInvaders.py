@@ -158,8 +158,8 @@ class Invader3:
 		return self.score
 
 # Bullet Class
-bullet = font_comic.render('Bullet',False,BLACK)
 
+bullet = font_comic.render('Bullet',False,BLACK)
 class Bullet:
 	bullet_x = ship_x + ship.get_width()/2
 	bullet_y = ship_y
