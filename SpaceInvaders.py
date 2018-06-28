@@ -14,7 +14,7 @@ GREY = (174, 182, 191)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
-ORANGE = (243, 156, 18)
+ORANGE = (255, 130, 0)
 GOLD = (230, 215, 0)
 YELLOW = (255,255,0)
 
@@ -74,7 +74,7 @@ def WelcomeScreen(): #initial screen before the game begins
 	screen.blit(text_welcome,(340,400))
 
 def Game(): #The game has begin... initialize all classes and display
-	global score,highest_score,ship,ship_y,ship_x,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys
+	global score,highest_score,ship,ship_y,ship_x,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4
 
 	background = pygame.image.load('background.png')
 	screen.blit(background,(0,0))
@@ -106,8 +106,15 @@ def Game(): #The game has begin... initialize all classes and display
 			invader3_list[i].Get_Invader()
 	if invader_mys.isAlive:
 			invader_mys.Get_Invader()
-	Move_Invader()#display all objects 
-	pass
+	Move_Invader()
+	for obstructs in obstruct1:
+		obstructs.Obs()
+	for obstructs in obstruct2:
+		obstructs.Obs()
+	for obstructs in obstruct3:
+		obstructs.Obs()
+	for obstructs in obstruct4:
+		obstructs.Obs()
 
 def Left_press(): #increase velocity
 	global vel_ship
@@ -153,7 +160,7 @@ def Fire_Spaceship(): #release a bullet from same x coordinate upwards
 	pass
 
 def initial():
-	global ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys
+	global ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4
 	# Spaceship object and starting coordinates
 	ship = font_comic.render('Ship',False,GOLD) # This line has to modified to get spaceship object
 	ship_y = screen.get_height() - 50
@@ -166,7 +173,10 @@ def initial():
 	invader2_list=[Invader2(invader2,i,185) for i in range(220,590,40)]
 	invader3_list=[Invader3(invader3,i,140) for i in range(220,590,40)]
 	invader_mys=Invader_Mystery(invaderM,380,100)
-
+ 	obstruct1 = [Obstruct(100+i,485+j) for j in range(0,40,10) for i in range (0,50,10)]
+ 	obstruct2 = [Obstruct(300+i,490+j) for j in range(0,30,10) for i in range (0,60,10)]
+ 	obstruct3 = [Obstruct(500+i,495+j) for j in range(0,40,10) for i in range (0,60,10)]
+ 	obstruct4 = [Obstruct(700+i,480+j) for j in range(0,30,10) for i in range (0,50,10)]
 
 # Function to change positon and display Spaceship
 def Spaceship():
@@ -337,6 +347,18 @@ def Move_Invader():
 		speed_mys *= -1.01
 	invader_mys.invader_x += speed_mys
 	invader_mys.invader_y += 0.1
+
+class Obstruct:
+	def __init__(self,x,y):
+		self.x = x
+		self.y = y
+
+	def Obs(self):
+		pygame.draw.rect(screen,GREY,(self.x,self.y,10,10))
+		for i in range (0,4):
+			pygame.draw.line(screen,BLACK,(self.x,self.y+2*(i+1)),(self.x+10,self.y+2*(i+1)))
+			pygame.draw.line(screen,BLACK,(self.x+2*(i+1),self.y),(self.x+2*(i+1),self.y+10))
+
 
 ##MAIN
 WelcomeScreen() ## contains initial screen
