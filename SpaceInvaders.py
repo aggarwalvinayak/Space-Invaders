@@ -72,13 +72,19 @@ def Game(): #The game has begin... initialize all classes and display
 	screen.blit(text_score,(630,25))
 	Spaceship()
 	for i in range(len(invader1a_list)):
-		invader1a_list[i].Get_Invader()
-		invader1b_list[i].Get_Invader()
-		invader1c_list[i].Get_Invader()
+		if invader1a_list[i].isAlive:
+			invader1a_list[i].Get_Invader()
+		if invader1b_list[i].isAlive:
+			invader1b_list[i].Get_Invader()
+		if invader1c_list[i].isAlive:
+			invader1c_list[i].Get_Invader()
 	for i in range(len(invader2_list)):
-		invader2_list[i].Get_Invader()
-		invader3_list[i].Get_Invader()
-	invader_mys.Get_Invader()
+		if invader2_list[i].isAlive:	
+			invader2_list[i].Get_Invader()
+		if invader3_list[i].isAlive:
+			invader3_list[i].Get_Invader()
+	if invader_mys.isAlive:
+			invader_mys.Get_Invader()
 	Move_Invader()
 	#display all objects 
 	pass
@@ -135,52 +141,59 @@ invader2 = font_comic.render('I2',False,GREY) # This line to be replaced by Inva
 invader3 = font_comic.render('I3',False,BLUE) # This line to be replaced by Invader image
 invaderM = font_comic.render('I3',False,BLUE)
 
-class Invader1:
+class Invader1: #score=10
 	global score
 	def __init__(self,invader1,invader_x,invader1_y):
 		self.invader1 = invader1
 		self.invader_x = invader_x
 		self.invader_y = invader1_y
+		self.isAlive = True
 	
 	def Get_Invader(self):
 		screen.blit(self.invader1,(self.invader_x,self.invader_y))
 
 	def Invader_Attack(self):
-		score += 10
+		self.isAlive = False
+		score += 10 #score=10
 
-class Invader2:
+class Invader2: #score=20
 	global score
 	def __init__(self,invader2,invader_x,invader2_y):
 		self.invader2 = invader2
 		self.invader_x = invader_x
 		self.invader_y = invader2_y
+		self.isAlive = True
 	
 	def Get_Invader(self):
 		screen.blit(self.invader2,(self.invader_x,self.invader_y))
 
 	def Invader_Attack(self):
-		score += 20
+		self.isAlive = False
+		score += 20 #score=20
 
-class Invader3:
+class Invader3: #score=30
 	global score
 	def __init__(self,invader3,invader_x,invader3_y):
 		self.invader3 = invader3
 		self.invader_x = invader_x
 		self.invader_y = invader3_y
+		self.isAlive = True
 	
 	def Get_Invader(self):
 		screen.blit(self.invader3,(self.invader_x,self.invader_y))
 
 	def Invader_Attack(self):
-		score += 30
+		self.isAlive = False
+		score += 30 #score=30
 
-class Invader_Mystery:
+class Invader_Mystery: #needs to be attacked thrice to be killed and score =100
 	global score
 	count=0
 	def __init__(self,invader_m,invader_x,invaderM_y):
 		self.invaderM = invader_m
 		self.invader_x = invader_x
 		self.invader_y = invaderM_y
+		self.isAlive = True
 	
 	def Get_Invader(self):
 		screen.blit(self.invaderM,(self.invader_x,self.invader_y))
@@ -188,6 +201,7 @@ class Invader_Mystery:
 	def Invader_Attack(self):
 		self.count+=1
 		if count==3:
+			self.isAlive = False 
 			score += 100
 
 # Bullet Class
@@ -205,34 +219,79 @@ class Bullet:
 
 # Invader Movement Function
 speed_invader1 = 2
-speed_invader2 = 3
-speed_invader3 = 4
-speed_mys = 10
+speed_invader2 = -3
+speed_invader3 = 3
+speed_mys = 8
 def Move_Invader():
 	global invader1a_list,invader2_list,invader1b_list,invader1c_list,invader3_list,invader_mys,speed_invader1,speed_invader2,speed_mys,speed_invader3
 	
-	if (invader1a_list[-1].invader_x >= 750 or invader1a_list[0].invader_x <= 50) :
-		speed_invader1 *= -1
+	left = 0
+	right = -1
+	flag_left,flag_right = 1,1
+	while flag_left or flag_right: #to check the leftmost and rightmost alive row
+		if invader1a_list[left].isAlive or invader1b_list[left].isAlive or invader1c_list[left].isAlive:
+			flag_left=0
+		else:
+			left += 1
+		if invader1a_list[right].isAlive or invader1b_list[right].isAlive or invader1c_list[right].isAlive:
+			flag_right=0
+		else:
+			right -= 1
+
+	if (invader1a_list[right].invader_x >= 750 or invader1a_list[left].invader_x <= 50) :
+		speed_invader1 *= -1.05
 	for invaders in invader1a_list:
 		invaders.invader_x += speed_invader1
+		invaders.invader_y += 0.13
 	for invaders in invader1b_list:
 		invaders.invader_x += speed_invader1
+		invaders.invader_y += 0.13
 	for invaders in invader1c_list:
 		invaders.invader_x += speed_invader1
+		invaders.invader_y += 0.13
 
-	if (invader2_list[-1].invader_x >= 750 or invader2_list[0].invader_x <= 50) :
-		speed_invader2 *= -1
+	left = 0
+	right = -1
+	flag_left,flag_right = 1,1
+	while flag_left or flag_right: #to check the leftmost and rightmost alive row
+		if invader2_list[left].isAlive:
+			flag_left=0
+		else:
+			left += 1
+		if invader2_list[right].isAlive:
+			flag_right=0
+		else:
+			right -= 1
+
+	if (invader2_list[right].invader_x >= 750 or invader2_list[left].invader_x <= 50) :
+		speed_invader2 *= -1.03
 	for invaders in invader2_list:
 		invaders.invader_x += speed_invader2
+		invaders.invader_y += 0.13
 
-	if (invader3_list[-1].invader_x >= 750 or invader3_list[0].invader_x <= 50) :
-		speed_invader3 *= -1
+	left = 0
+	right = -1
+	flag_left,flag_right = 1,1
+	while flag_left or flag_right: #to check the leftmost and rightmost alive row
+		if invader3_list[left].isAlive:
+			flag_left=0
+		else:
+			left += 1
+		if invader3_list[right].isAlive:
+			flag_right=0
+		else:
+			right -= 1
+
+	if (invader3_list[right].invader_x >= 750 or invader3_list[left].invader_x <= 50) :
+		speed_invader3 *= -1.03
 	for invaders in invader3_list:
 		invaders.invader_x += speed_invader3
+		invaders.invader_y += 0.13
 
 	if (invader_mys.invader_x >= 750 or invader_mys.invader_x <=50 ):
-		speed_mys *= -1
+		speed_mys *= -1.01
 	invader_mys.invader_x += speed_mys
+	invader_mys.invader_y += 0.1
 
 ##MAIN
 WelcomeScreen() ## contains initial screen
@@ -245,7 +304,7 @@ while not quit:
 	else:
 		Game()
 
-	for event in pygame.event.get():       
+	for event in pygame.event.get(): 
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_LEFT:
 				Left_press()
