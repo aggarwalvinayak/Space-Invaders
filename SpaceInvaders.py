@@ -50,6 +50,7 @@ def WelcomeScreen(): #initial screen before the game begins
 		if mouse_click[0]:
 			game_state = True
 			Game()
+			
 	else:
 		pygame.draw.rect(screen,BLUE,(270,400,265,80))
 
@@ -78,7 +79,7 @@ def Game(): #The game has begin... initialize all classes and display
 		invader2_list[i].Get_Invader()
 		invader3_list[i].Get_Invader()
 	invader_mys.Get_Invader()
-
+	Move_Invader()
 	#display all objects 
 	pass
 
@@ -190,8 +191,8 @@ class Invader_Mystery:
 			score += 100
 
 # Bullet Class
-bullet = font_comic.render('Bullet',False,BLACK)
 
+bullet = font_comic.render('Bullet',False,BLACK)
 class Bullet:
 	global ship_x,ship_y
 	def __init__(self,bullet):
@@ -201,6 +202,37 @@ class Bullet:
 
 	def Get_Bullet(self):
 		screen.blit(self.bullet,(self.bullet_x,self.bullet_y))
+
+# Invader Movement Function
+speed_invader1 = 2
+speed_invader2 = 3
+speed_invader3 = 4
+speed_mys = 10
+def Move_Invader():
+	global invader1a_list,invader2_list,invader1b_list,invader1c_list,invader3_list,invader_mys,speed_invader1,speed_invader2,speed_mys,speed_invader3
+	
+	if (invader1a_list[-1].invader_x >= 750 or invader1a_list[0].invader_x <= 50) :
+		speed_invader1 *= -1
+	for invaders in invader1a_list:
+		invaders.invader_x += speed_invader1
+	for invaders in invader1b_list:
+		invaders.invader_x += speed_invader1
+	for invaders in invader1c_list:
+		invaders.invader_x += speed_invader1
+
+	if (invader2_list[-1].invader_x >= 750 or invader2_list[0].invader_x <= 50) :
+		speed_invader2 *= -1
+	for invaders in invader2_list:
+		invaders.invader_x += speed_invader2
+
+	if (invader3_list[-1].invader_x >= 750 or invader3_list[0].invader_x <= 50) :
+		speed_invader3 *= -1
+	for invaders in invader3_list:
+		invaders.invader_x += speed_invader3
+
+	if (invader_mys.invader_x >= 750 or invader_mys.invader_x <=50 ):
+		speed_mys *= -1
+	invader_mys.invader_x += speed_mys
 
 ##MAIN
 WelcomeScreen() ## contains initial screen
