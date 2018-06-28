@@ -57,7 +57,7 @@ def WelcomeScreen(): #initial screen before the game begins
 	screen.blit(text_welcome,(280,417))
 
 def Game(): #The game has begin... initialize all classes and display
-	global score,highest_score,ship,ship_y,ship_x
+	global score,highest_score,ship,ship_y,ship_x,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys
 
 	background = pygame.image.load('background.png')
 	screen.blit(background,(0,0))
@@ -70,7 +70,14 @@ def Game(): #The game has begin... initialize all classes and display
 	text_score = font_comic.render(str(highest_score), False, ORANGE)
 	screen.blit(text_score,(630,25))
 	Spaceship()
-
+	for i in range(len(invader1a_list)):
+		invader1a_list[i].Get_Invader()
+		invader1b_list[i].Get_Invader()
+		invader1c_list[i].Get_Invader()
+	for i in range(len(invader2_list)):
+		invader2_list[i].Get_Invader()
+		invader3_list[i].Get_Invader()
+	invader_mys.Get_Invader()
 
 	#display all objects 
 	pass
@@ -94,12 +101,20 @@ def Fire_Spaceship(): #release a bullet from same x coordinate upwards
 	pass
 
 def initial():
-	global ship,ship_x,ship_y,vel_ship
+	global ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys
 	# Spaceship object and starting coordinates
 	ship = font_comic.render('Ship',False,GOLD) # This line has to modified to get spaceship object
 	ship_y = screen.get_height() - 50
 	ship_x = screen.get_width()/2 - ship.get_width()/2
 	vel_ship=0
+	##Initalise invaders
+	invader1a_list=[Invader1(invader1,i,300) for i in range(200,650,50)]
+	invader1b_list=[Invader1(invader1,i,265) for i in range(200,650,50)]
+	invader1c_list=[Invader1(invader1,i,230) for i in range(200,650,50)]
+	invader2_list=[Invader2(invader2,i,185) for i in range(220,590,40)]
+	invader3_list=[Invader3(invader3,i,140) for i in range(220,590,40)]
+	invader_mys=Invader_Mystery(invaderM,380,100)
+
 
 # Function to change positon and display Spaceship
 def Spaceship():
@@ -114,58 +129,75 @@ def Spaceship():
 	screen.blit(ship,(ship_x,ship_y))
 
 # Invader Class
-invader1 = font_comic.render('Invader1',False,RED) # This line to be replaced by Invader image
-invader2 = font_comic.render('Invader2',False,GREY) # This line to be replaced by Invader image
-invader3 = font_comic.render('Invader3',False,BLUE) # This line to be replaced by Invader image
+invader1 = font_comic.render('I1',False,RED) # This line to be replaced by Invader image
+invader2 = font_comic.render('I2',False,GREY) # This line to be replaced by Invader image
+invader3 = font_comic.render('I3',False,BLUE) # This line to be replaced by Invader image
+invaderM = font_comic.render('I3',False,BLUE)
 
 class Invader1:
-	def __init__(self,invader1,invader_x,invader1_y,score):
+	global score
+	def __init__(self,invader1,invader_x,invader1_y):
 		self.invader1 = invader1
 		self.invader_x = invader_x
-		self.invader1_y = invader1_y
+		self.invader_y = invader1_y
 	
 	def Get_Invader(self):
-		screen.blit(self.invader1,(self.invader_x,self.invader1_y))
+		screen.blit(self.invader1,(self.invader_x,self.invader_y))
 
 	def Invader_Attack(self):
-		self.score += 10
-		return self.score
+		score += 10
 
 class Invader2:
-	def __init__(self,invader2,invader_x,invader2_y,score):
+	global score
+	def __init__(self,invader2,invader_x,invader2_y):
 		self.invader2 = invader2
 		self.invader_x = invader_x
-		self.invader2_y = invader2_y
+		self.invader_y = invader2_y
 	
 	def Get_Invader(self):
-		screen.blit(self.invader2,(self.invader_x,self.invader2_y))
+		screen.blit(self.invader2,(self.invader_x,self.invader_y))
 
 	def Invader_Attack(self):
-		self.score += 20
-		return self.score
+		score += 20
 
 class Invader3:
-	def __init__(self,invader3,invader_x,invader3_y,score):
+	global score
+	def __init__(self,invader3,invader_x,invader3_y):
 		self.invader3 = invader3
 		self.invader_x = invader_x
-		self.invader3_y = invader3_y
+		self.invader_y = invader3_y
 	
 	def Get_Invader(self):
-		screen.blit(self.invader3,(self.invader_x,self.invader3_y))
+		screen.blit(self.invader3,(self.invader_x,self.invader_y))
 
 	def Invader_Attack(self):
-		self.score += 30
-		return self.score
+		score += 30
+
+class Invader_Mystery:
+	global score
+	count=0
+	def __init__(self,invader_m,invader_x,invaderM_y):
+		self.invaderM = invader_m
+		self.invader_x = invader_x
+		self.invader_y = invaderM_y
+	
+	def Get_Invader(self):
+		screen.blit(self.invaderM,(self.invader_x,self.invader_y))
+
+	def Invader_Attack(self):
+		self.count+=1
+		if count==3:
+			score += 100
 
 # Bullet Class
 
 bullet = font_comic.render('Bullet',False,BLACK)
 class Bullet:
-	bullet_x = ship_x + ship.get_width()/2
-	bullet_y = ship_y
-
+	global ship_x,ship_y
 	def __init__(self,bullet):
 		self.bullet = bullet
+		self.bullet_x = ship_x + ship.get_width()/2
+		self.bullet_y = ship_y
 
 	def Get_Bullet(self):
 		screen.blit(self.bullet,(self.bullet_x,self.bullet_y))
