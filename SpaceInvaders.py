@@ -127,6 +127,7 @@ def Game(): #The game has begin... initialize all classes and display
 		if bullet1.bullet_y<= 100:
 			bullet1.isAlive=False
 
+
 			
 def Left_press(): #increase velocity
 	global vel_ship
