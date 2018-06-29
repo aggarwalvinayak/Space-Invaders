@@ -149,7 +149,7 @@ def Game_end(): ##Increase size of font and positioning correctly left
 	mouse=pygame.mouse.get_pos()
 	click=pygame.mouse.get_pressed()
 	screen.fill(GOLD)
-	myfont_win = pygame.font.SysFont('Comic Sans MS', 120)
+	myfont_win = pygame.font.SysFont('Comic Sans MS', 100)
 	myfont_quit = pygame.font.SysFont('Comic Sans MS', 40)
 	col=random.choice((1,2,3))
 	if game_state==2:
