@@ -27,7 +27,6 @@ pygame.display.set_caption('SPACE INVADER')
 clock = pygame.time.Clock()
 
 score=0
-bullet = pygame.image.load('bullet.jpg')
 
 try:
 	file_highscore=open("highscore.txt",'r') #reads highscore from text file
@@ -75,7 +74,7 @@ def WelcomeScreen(): #initial screen before the game begins
 	screen.blit(text_welcome,(340,400))
 
 def Game(): #The game has begin... initialize all classes and display
-	global score,highest_score,ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4,invader1,invader2,invader3,invaderM,bullet,i1fire,i2fire,i3fire,i4fire,speed_invader1,speed_invader2,speed_invader3,speed_mys
+	global score,highest_score,ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4,invader1,invader2,invader3,invaderM,bullet,i1fire,i2fire,i3fire,i4fire,speed_invader1,speed_invader2,speed_invader3,speed_mys,bullet1,vel_bull
 
 	background = pygame.image.load('background.png')
 	screen.blit(background,(0,0))
@@ -121,6 +120,13 @@ def Game(): #The game has begin... initialize all classes and display
 		if obstructs.isAlive:
 			obstructs.Obs()
 	Reach_bottom()
+	Check_hit()
+	if bullet1.isAlive:
+		bullet1.bullet_y+=vel_bull
+		bullet1.Get_Bullet()
+		if bullet1.bullet_y<= 100:
+			bullet1.isAlive=False
+
 
 			
 def Left_press(): #increase velocity
@@ -139,7 +145,7 @@ def Release_arrowkey(): #velocity=0
 	pass
 
 def Game_end(): ##Increase size of font and positioning correctly left
-	global quit
+	global quit,game_state
 	mouse=pygame.mouse.get_pos()
 	click=pygame.mouse.get_pressed()
 	screen.fill(GOLD)
@@ -179,16 +185,17 @@ def Game_end(): ##Increase size of font and positioning correctly left
 		screen.blit(textsurface,(430,410))
 
 def Fire_Spaceship(): #release a bullet from same x coordinate upwards
-	bullet1=Bullet(bullet)
-	while bullet1.bullet_y > 0:
-		bullet1.Get_Bullet()
-		bullet1.bullet_y -= 10
-
-
+	global bullet1,vel_bull
+	if bullet1.isAlive:
+		pass
+	else:
+		bullet1=Bullet(bullet)
+		bullet1.isAlive = True
+		vel_bull=-15
 	pass
 
 def initial():
-	global ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4,invader1,invader2,invader3,invaderM,bullet,i1fire,i2fire,i3fire,i4fire,speed_invader1,speed_invader2,speed_invader3,speed_mys
+	global ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4,invader1,invader2,invader3,invaderM,bullet,i1fire,i2fire,i3fire,i4fire,speed_invader1,speed_invader2,speed_invader3,speed_mys,bullet1
 	# Spaceship object and starting coordinates
 	ship = pygame.image.load('tank.png').convert_alpha()
 	ship_y = screen.get_height() - 70
@@ -203,6 +210,8 @@ def initial():
 	i2fire = pygame.image.load('i2fire.png')
 	i3fire = pygame.image.load('i3fire.png')
 	i4fire = pygame.image.load('i4fire.png')
+	bullet = pygame.image.load('bullet.jpg')
+	bullet1 = Bullet(bullet)
 	speed_invader1 = 2
 	speed_invader2 = -3
 	speed_invader3 = 3
@@ -232,7 +241,6 @@ def Spaceship():
 	screen.blit(ship,(ship_x,ship_y))
 
 class Invader1: #score=10
-	global score
 	def __init__(self,invader1,invader_x,invader1_y):
 		self.invader1 = invader1
 		self.invader_x = invader_x
@@ -243,11 +251,11 @@ class Invader1: #score=10
 		screen.blit(self.invader1,(self.invader_x,self.invader_y))
 
 	def Invader_Attack(self):
+		global score
 		self.isAlive = False
 		score += 10 #score=10
 
 class Invader2: #score=20
-	global score
 	def __init__(self,invader2,invader_x,invader2_y):
 		self.invader2 = invader2
 		self.invader_x = invader_x
@@ -258,11 +266,11 @@ class Invader2: #score=20
 		screen.blit(self.invader2,(self.invader_x,self.invader_y))
 
 	def Invader_Attack(self):
+		global score
 		self.isAlive = False
 		score += 20 #score=20
 
 class Invader3: #score=30
-	global score
 	def __init__(self,invader3,invader_x,invader3_y):
 		self.invader3 = invader3
 		self.invader_x = invader_x
@@ -273,24 +281,25 @@ class Invader3: #score=30
 		screen.blit(self.invader3,(self.invader_x,self.invader_y))
 
 	def Invader_Attack(self):
+		global score
 		self.isAlive = False
 		score += 30 #score=30
 
 class Invader_Mystery: #needs to be attacked thrice to be killed and score =100
-	global score
-	count=0
 	def __init__(self,invader_m,invader_x,invaderM_y):
 		self.invaderM = invader_m
 		self.invader_x = invader_x
 		self.invader_y = invaderM_y
 		self.isAlive = True
+		self.count=0
 	
 	def Get_Invader(self):
 		screen.blit(self.invaderM,(self.invader_x,self.invader_y))
 
 	def Invader_Attack(self):
+		global score
 		self.count+=1
-		if count==3:
+		if self.count==3:
 			self.isAlive = False 
 			score += 100
 
@@ -298,8 +307,9 @@ class Bullet:
 	global ship_x,ship_y
 	def __init__(self,bullet):
 		self.bullet = bullet
-		self.bullet_x = ship_x + ship.get_width()/2
+		self.bullet_x = ship_x + ship.get_width()/2 -5
 		self.bullet_y = ship_y
+		self.isAlive = False
 
 	def Get_Bullet(self):
 		screen.blit(self.bullet,(self.bullet_x,self.bullet_y))
@@ -418,6 +428,56 @@ def Reach_bottom():
 	if invader_mys.isAlive and (invader_mys.invader_y>410):
 		game_state =2
 
+def Check_hit():
+	if bullet1.isAlive:
+		for i in range(len(invader1a_list)):
+			if invader1a_list[i].isAlive:
+				if bullet1.bullet_x+3 >= invader1a_list[i].invader_x and bullet1.bullet_x+3 <= invader1a_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader1a_list[i].invader_y and bullet1.bullet_y+9 <= invader1a_list[i].invader_y + 26:
+					bullet1.isAlive = False
+					invader1a_list[i].Invader_Attack()
+			if invader1b_list[i].isAlive:
+				if bullet1.bullet_x+3 >= invader1a_list[i].invader_x and bullet1.bullet_x+3 <= invader1a_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader1a_list[i].invader_y and bullet1.bullet_y+9 <= invader1a_list[i].invader_y + 26:
+					bullet1.isAlive = False
+					invader1a_list[i].Invader_Attack()
+			if invader1c_list[i].isAlive:
+				if bullet1.bullet_x+3 >= invader1a_list[i].invader_x and bullet1.bullet_x+3 <= invader1a_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader1a_list[i].invader_y and bullet1.bullet_y+9 <= invader1a_list[i].invader_y + 26:
+					bullet1.isAlive = False
+					invader1a_list[i].Invader_Attack()
+		for i in range(len(invader2_list)):
+			if invader2_list[i].isAlive:	
+				if bullet1.bullet_x+3 >= invader2_list[i].invader_x and bullet1.bullet_x+3 <= invader2_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader2_list[i].invader_y and bullet1.bullet_y+9 <= invader2_list[i].invader_y + 26:
+					bullet1.isAlive = False
+					invader2_list[i].Invader_Attack()
+			if invader3_list[i].isAlive:
+				if bullet1.bullet_x+3 >= invader3_list[i].invader_x and bullet1.bullet_x+3 <= invader3_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader3_list[i].invader_y and bullet1.bullet_y+9 <= invader3_list[i].invader_y + 26:
+					bullet1.isAlive = False
+					invader3_list[i].Invader_Attack()
+		if invader_mys.isAlive:
+				if bullet1.bullet_x+3 >= invader_mys.invader_x and bullet1.bullet_x+3 <= invader_mys.invader_x + 28 and bullet1.bullet_y+9 >= invader_mys.invader_y and bullet1.bullet_y+9 <= invader_mys.invader_y + 26:
+					bullet1.isAlive = False
+					invader_mys.Invader_Attack()
+
+		for obstructs in obstruct1:
+			if obstructs.isAlive:
+				if bullet1.bullet_x+3 >= obstructs.x and bullet1.bullet_x+3 <= obstructs.x + 10 and bullet1.bullet_y+9 >= obstructs.y and bullet1.bullet_y+3 <= obstructs.y + 10:
+					bullet1.isAlive = False
+					obstructs.isAlive = False
+		for obstructs in obstruct2:
+			if obstructs.isAlive:
+				if bullet1.bullet_x+3 >= obstructs.x and bullet1.bullet_x+3 <= obstructs.x + 10 and bullet1.bullet_y+9 >= obstructs.y and bullet1.bullet_y+3 <= obstructs.y + 10:
+					bullet1.isAlive = False
+					obstructs.isAlive = False
+		for obstructs in obstruct3:
+			if obstructs.isAlive:
+				if bullet1.bullet_x+3 >= obstructs.x and bullet1.bullet_x+3 <= obstructs.x + 10 and bullet1.bullet_y+9 >= obstructs.y and bullet1.bullet_y+3 <= obstructs.y + 10:
+					bullet1.isAlive = False
+					obstructs.isAlive = False
+		for obstructs in obstruct4:
+			if obstructs.isAlive:
+				if bullet1.bullet_x+3 >= obstructs.x and bullet1.bullet_x+3 <= obstructs.x + 10 and bullet1.bullet_y+9 >= obstructs.y and bullet1.bullet_y+3 <= obstructs.y + 10:
+					bullet1.isAlive = False
+					obstructs.isAlive = False
+
 
 ##MAIN
 initial()
@@ -455,7 +515,3 @@ while not quit:
 	pygame.display.update()
 
 pygame.quit()
-
-
-
-
