@@ -37,7 +37,7 @@ except:
 	highest_score=0
 
 def WelcomeScreen(): #initial screen before the game begins
-	global quit,game_state
+	global quit,game_state,invader1,invader2,invaderM,invader3
 	mouse_pos=pygame.mouse.get_pos()
 	mouse_click=pygame.mouse.get_pressed()
 	screen.fill(GREY)
@@ -47,22 +47,22 @@ def WelcomeScreen(): #initial screen before the game begins
 
 	screen.blit(invader1,(150,550))
 	points1 = font_points.render(':- 10 POINTS', False, BLUE)
-	screen.blit(points1,(180,550))
+	screen.blit(points1,(200,550))
 	screen.blit(invader2,(450,550))
 	points1 = font_points.render(':- 20 POINTS', False, BLUE)
-	screen.blit(points1,(480,550))
+	screen.blit(points1,(500,550))
 	screen.blit(invader3,(150,600))
 	points1 = font_points.render(':- 30 POINTS', False, BLUE)
-	screen.blit(points1,(180,600))
+	screen.blit(points1,(200,600))
 	screen.blit(invaderM,(450,600))
 	points1 = font_points.render(':- Mystery (Hit Thrice)', False, BLUE)
-	screen.blit(points1,(480,600))
+	screen.blit(points1,(500,600))
 
 
 	if ((mouse_pos[0]-400)**2 + (mouse_pos[1]-400)**2) <=8100 :
 		pygame.draw.circle(screen, RED,(400,400),90)
 		if mouse_click[0]:
-			game_state = True
+			game_state = 1
 			Game()
 			
 	else:
@@ -74,7 +74,7 @@ def WelcomeScreen(): #initial screen before the game begins
 	screen.blit(text_welcome,(340,400))
 
 def Game(): #The game has begin... initialize all classes and display
-	global score,highest_score,ship,ship_y,ship_x,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4
+	global score,highest_score,ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4,invader1,invader2,invader3,invaderM,bullet,i1fire,i2fire,i3fire,i4fire,speed_invader1,speed_invader2,speed_invader3,speed_mys
 
 	background = pygame.image.load('background.png')
 	screen.blit(background,(0,0))
@@ -108,14 +108,19 @@ def Game(): #The game has begin... initialize all classes and display
 			invader_mys.Get_Invader()
 	Move_Invader()
 	for obstructs in obstruct1:
-		obstructs.Obs()
+		if obstructs.isAlive:
+			obstructs.Obs()
 	for obstructs in obstruct2:
-		obstructs.Obs()
+		if obstructs.isAlive:
+			obstructs.Obs()
 	for obstructs in obstruct3:
-		obstructs.Obs()
+		if obstructs.isAlive:
+			obstructs.Obs()
 	for obstructs in obstruct4:
-		obstructs.Obs()
-
+		if obstructs.isAlive:
+			obstructs.Obs()
+	Reach_bottom()
+			
 def Left_press(): #increase velocity
 	global vel_ship
 	vel_ship=-10
@@ -160,12 +165,26 @@ def Fire_Spaceship(): #release a bullet from same x coordinate upwards
 	pass
 
 def initial():
-	global ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4
+	global ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4,invader1,invader2,invader3,invaderM,bullet,i1fire,i2fire,i3fire,i4fire,speed_invader1,speed_invader2,speed_invader3,speed_mys
 	# Spaceship object and starting coordinates
 	ship = pygame.image.load('tank.png').convert_alpha()
-	ship_y = screen.get_height() - 50
+	ship_y = screen.get_height() - 70
 	ship_x = screen.get_width()/2 - ship.get_width()/2
 	vel_ship=0
+	# Invader Class
+	invader1 = pygame.image.load('i1.png').convert_alpha()
+	invader2 = pygame.image.load('i3.png').convert_alpha()  
+	invader3 = pygame.image.load('i2.png').convert_alpha()  
+	invaderM = pygame.image.load('i4.png').convert_alpha()
+	bullet = pygame.image.load('bullet.jpg')
+	i1fire = pygame.image.load('i1fire.png')
+	i2fire = pygame.image.load('i2fire.png')
+	i3fire = pygame.image.load('i3fire.png')
+	i4fire = pygame.image.load('i4fire.png')
+	speed_invader1 = 2
+	speed_invader2 = -3
+	speed_invader3 = 3
+	speed_mys = 8
 	##Initalise invaders
 	invader1a_list=[Invader1(invader1,i,300) for i in range(200,650,50)]
 	invader1b_list=[Invader1(invader1,i,265) for i in range(200,650,50)]
@@ -173,28 +192,22 @@ def initial():
 	invader2_list=[Invader2(invader2,i,185) for i in range(220,590,40)]
 	invader3_list=[Invader3(invader3,i,140) for i in range(220,590,40)]
 	invader_mys=Invader_Mystery(invaderM,380,100)
- 	obstruct1 = [Obstruct(100+i,485+j) for j in range(0,40,10) for i in range (0,50,10)]
- 	obstruct2 = [Obstruct(300+i,490+j) for j in range(0,30,10) for i in range (0,60,10)]
- 	obstruct3 = [Obstruct(500+i,495+j) for j in range(0,40,10) for i in range (0,60,10)]
- 	obstruct4 = [Obstruct(700+i,480+j) for j in range(0,30,10) for i in range (0,50,10)]
+	obstruct1 = [Obstruct(100+i,500+j) for j in range(0,30,10) for i in range (0,50,10)]
+	obstruct2 = [Obstruct(300+i,500+j) for j in range(0,30,10) for i in range (0,50,10)]
+	obstruct3 = [Obstruct(500+i,500+j) for j in range(0,30,10) for i in range (0,50,10)]
+	obstruct4 = [Obstruct(700+i,500+j) for j in range(0,30,10) for i in range (0,50,10)]
 
 # Function to change positon and display Spaceship
 def Spaceship():
 	global vel_ship,ship,ship_y,ship_x
 	ship_x+=vel_ship
-	if ship_x <= 0 + ship.get_width()/2: #stop if hits left wall
+	if ship_x <= 0 + 5: #stop if hits left wall
 		ship_x-=vel_ship
 		vel_ship=0
-	if ship_x >= 800 - ship.get_width()/2: #stop if hits right wall
+	if ship_x >= 800 - ship.get_width(): #stop if hits right wall
 		ship_x-=vel_ship
 		vel_ship=0
 	screen.blit(ship,(ship_x,ship_y))
-
-# Invader Class
-invader1 = pygame.image.load('i1.png').convert_alpha()
-invader2 = pygame.image.load('i3.png').convert_alpha()  
-invader3 = pygame.image.load('i2.png').convert_alpha()  
-invaderM = pygame.image.load('i4.png').convert_alpha()
 
 class Invader1: #score=10
 	global score
@@ -259,14 +272,6 @@ class Invader_Mystery: #needs to be attacked thrice to be killed and score =100
 			self.isAlive = False 
 			score += 100
 
-# Bullet Class
-
-bullet = pygame.image.load('bullet.jpg')
-i1fire = pygame.image.load('i1fire.png')
-i2fire = pygame.image.load('i2fire.png')
-i3fire = pygame.image.load('i3fire.png')
-i4fire = pygame.image.load('i4fire.png')
-
 class Bullet:
 	global ship_x,ship_y
 	def __init__(self,bullet):
@@ -278,10 +283,6 @@ class Bullet:
 		screen.blit(self.bullet,(self.bullet_x,self.bullet_y))
 
 # Invader Movement Function
-speed_invader1 = 2
-speed_invader2 = -3
-speed_invader3 = 3
-speed_mys = 8
 def Move_Invader():
 	global invader1a_list,invader2_list,invader1b_list,invader1c_list,invader3_list,invader_mys,speed_invader1,speed_invader2,speed_mys,speed_invader3
 	
@@ -298,7 +299,7 @@ def Move_Invader():
 		else:
 			right -= 1
 
-	if (invader1a_list[right].invader_x >= 750 or invader1a_list[left].invader_x <= 50) :
+	if (invader1a_list[right].invader_x >= 750 or invader1a_list[left].invader_x <= 15) :
 		speed_invader1 *= -1.05
 	for invaders in invader1a_list:
 		invaders.invader_x += speed_invader1
@@ -323,7 +324,7 @@ def Move_Invader():
 		else:
 			right -= 1
 
-	if (invader2_list[right].invader_x >= 750 or invader2_list[left].invader_x <= 50) :
+	if (invader2_list[right].invader_x >= 750 or invader2_list[left].invader_x <= 15) :
 		speed_invader2 *= -1.03
 	for invaders in invader2_list:
 		invaders.invader_x += speed_invader2
@@ -342,13 +343,13 @@ def Move_Invader():
 		else:
 			right -= 1
 
-	if (invader3_list[right].invader_x >= 750 or invader3_list[left].invader_x <= 50) :
+	if (invader3_list[right].invader_x >= 750 or invader3_list[left].invader_x <= 15) :
 		speed_invader3 *= -1.03
 	for invaders in invader3_list:
 		invaders.invader_x += speed_invader3
 		invaders.invader_y += 0.13
 
-	if (invader_mys.invader_x >= 750 or invader_mys.invader_x <=50 ):
+	if (invader_mys.invader_x >= 740 or invader_mys.invader_x <=15 ):
 		speed_mys *= -1.01
 	invader_mys.invader_x += speed_mys
 	invader_mys.invader_y += 0.1
@@ -357,24 +358,55 @@ class Obstruct:
 	def __init__(self,x,y):
 		self.x = x
 		self.y = y
+		self.isAlive = True
 
 	def Obs(self):
 		pygame.draw.rect(screen,GREY,(self.x,self.y,10,10))
 		for i in range (0,4):
 			pygame.draw.line(screen,BLACK,(self.x,self.y+2*(i+1)),(self.x+10,self.y+2*(i+1)))
 			pygame.draw.line(screen,BLACK,(self.x+2*(i+1),self.y),(self.x+2*(i+1),self.y+10))
+	def Obs_Attack():
+		self.isAlive = False
+
+def Reach_bottom():
+	global game_state
+	for invader in invader1a_list:
+		if invader.isAlive and (invader.invader_y>450):
+			game_state=2
+			return False
+	for invader in invader1b_list:
+		if invader.isAlive and (invader.invader_y>450):
+			game_state=2
+			return False
+	for invader in invader1c_list:
+		if invader.isAlive and (invader.invader_y>450):
+			game_state=2
+			return False
+	for invader in invader2_list:
+		if invader.isAlive and (invader.invader_y>450):
+			game_state=2
+			return False
+	for invader in invader3_list:
+		if invader.isAlive and (invader.invader_y>450):
+			game_state=2
+			return False
+	if invader_mys.isAlive and (invader_mys.invader_y>410):
+		game_state =2
 
 
 ##MAIN
-WelcomeScreen() ## contains initial screen
-game_state=False
-quit=False
 initial()
+WelcomeScreen() ## contains initial screen
+## game state=0 means start page... =1 means game is going on... =2 means game lost... =3 means won the game
+game_state=0 
+quit=False
 while not quit:
 	if not game_state:
 		WelcomeScreen()
-	else:
+	elif game_state==1:
 		Game()
+	elif game_state == 2:
+		Game_Over()
 
 	for event in pygame.event.get(): 
 		if event.type == pygame.KEYDOWN:
