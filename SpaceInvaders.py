@@ -27,6 +27,7 @@ pygame.display.set_caption('SPACE INVADER')
 clock = pygame.time.Clock()
 
 score=0
+bullet = pygame.image.load('bullet.jpg')
 
 try:
 	file_highscore=open("highscore.txt",'r') #reads highscore from text file
@@ -162,6 +163,12 @@ def Win_message(): ##Increase size of font and positioning correctly left
 	screen.blit(textsurface,(220,410)) 
 
 def Fire_Spaceship(): #release a bullet from same x coordinate upwards
+	bullet1=Bullet(bullet)
+	while bullet1.bullet_y > 0:
+		bullet1.Get_Bullet()
+		bullet1.bullet_y -= 10
+
+
 	pass
 
 def initial():
@@ -176,7 +183,6 @@ def initial():
 	invader2 = pygame.image.load('i3.png').convert_alpha()  
 	invader3 = pygame.image.load('i2.png').convert_alpha()  
 	invaderM = pygame.image.load('i4.png').convert_alpha()
-	bullet = pygame.image.load('bullet.jpg')
 	i1fire = pygame.image.load('i1fire.png')
 	i2fire = pygame.image.load('i2fire.png')
 	i3fire = pygame.image.load('i3fire.png')
