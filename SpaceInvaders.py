@@ -120,6 +120,7 @@ def Game(): #The game has begin... initialize all classes and display
 		if obstructs.isAlive:
 			obstructs.Obs()
 	Reach_bottom()
+
 			
 def Left_press(): #increase velocity
 	global vel_ship
@@ -136,21 +137,25 @@ def Release_arrowkey(): #velocity=0
 	vel_ship=0
 	pass
 
-def Win_message(): ##Increase size of font and positioning correctly left
+def Game_end(): ##Increase size of font and positioning correctly left
 	global quit
 	mouse=pygame.mouse.get_pos()
 	click=pygame.mouse.get_pressed()
 	screen.fill(GOLD)
 	myfont_win = pygame.font.SysFont('Comic Sans MS', 120)
 	col=random.choice((1,2,3))
+	if game_state==2:
+		game_endtext='YOU LOST <_>..!!'
+	if game_state == 3:
+		game_endtext='YOU WONNN <_>..!!'
 	if col==1:
-		textsurface=myfont_win.render("YOU WON..!!",False, BLUE)
+		textsurface=myfont_win.render(str(game_endtext),False, BLUE)
 		screen.blit(textsurface,(190,200)) 
 	if col==2:
-		textsurface=myfont_win.render("YOU WON..!!",False, ORANGE)
+		textsurface=myfont_win.render(str(game_endtext),False, ORANGE)
 		screen.blit(textsurface,(190,200))
 	if col==3:
-		textsurface=myfont_win.render("YOU WON..!!",False, RED)
+		textsurface=myfont_win.render(str(game_endtext),False, RED)
 		screen.blit(textsurface,(190,200))
 	if mouse[0] < 375 and mouse[0] > 200 and mouse[1] < 450 and mouse[1] > 400:
 		pygame.draw.rect(screen, GREEN,(200, 400,125,50))
@@ -160,6 +165,17 @@ def Win_message(): ##Increase size of font and positioning correctly left
 		pygame.draw.rect(screen,RED,(200,400,125,50))   
 	textsurface = myfont.render('QUIT', False, WHITE)
 	screen.blit(textsurface,(220,410)) 
+	if game_state == 3:
+		if mouse[0] < 650 and mouse[0] > 430 and mouse[1] < 450 and mouse[1] > 400:
+			pygame.draw.rect(screen, GREEN,(410,400,220,50))
+			if click[0]==1:
+				initial()
+				game_state = 1
+				Game()
+		else:
+			pygame.draw.rect(screen,BLUE,(410,400,220,50))   
+		textsurface = myfont.render('PLAY AGAIN', False, WHITE)
+		screen.blit(textsurface,(430,410))
 
 def Fire_Spaceship(): #release a bullet from same x coordinate upwards
 	pass
@@ -361,10 +377,13 @@ class Obstruct:
 		self.isAlive = True
 
 	def Obs(self):
-		pygame.draw.rect(screen,GREY,(self.x,self.y,10,10))
-		for i in range (0,4):
-			pygame.draw.line(screen,BLACK,(self.x,self.y+2*(i+1)),(self.x+10,self.y+2*(i+1)))
-			pygame.draw.line(screen,BLACK,(self.x+2*(i+1),self.y),(self.x+2*(i+1),self.y+10))
+		'''pygame.draw.rect(screen,GREY,(self.x,self.y,10,10))
+								for i in range (0,4):
+									pygame.draw.line(screen,BLACK,(self.x,self.y+2*(i+1)),(self.x+10,self.y+2*(i+1)))
+									pygame.draw.line(screen,BLACK,(self.x+2*(i+1),self.y),(self.x+2*(i+1),self.y+10))'''
+		obs_image=pygame.image.load('spray_10.jpg').convert_alpha()
+		screen.blit(obs_image,(self.x,self.y))
+
 	def Obs_Attack():
 		self.isAlive = False
 
@@ -406,7 +425,9 @@ while not quit:
 	elif game_state==1:
 		Game()
 	elif game_state == 2:
-		Game_Over()
+		Game_end()
+	elif game_state ==3:
+		Game_end()
 
 	for event in pygame.event.get(): 
 		if event.type == pygame.KEYDOWN:
