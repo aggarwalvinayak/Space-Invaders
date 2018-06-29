@@ -14,20 +14,19 @@ GREY = (174, 182, 191)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
-ORANGE = (255, 130, 0)
+ORANGE = (243, 156, 18)
 GOLD = (230, 215, 0)
-YELLOW = (255,255,0)
 
 font_comic = pygame.font.SysFont('Comic Sans MS', 40)
 font_times = pygame.font.SysFont('Times New Roman', 40)
-font_points = pygame.font.SysFont('Times New Roman', 20)
 
 screen = pygame.display.set_mode((800,650)) #Initialzing display
 pygame.display.set_caption('SPACE INVADER') 
 clock = pygame.time.Clock()
 
 score=0
-
+shoot_y=0
+shot = pygame.image.load('bullet.jpg')
 try:
 	file_highscore=open("highscore.txt",'r') #reads highscore from text file
 	file_highscore.seek(0,0)
@@ -37,44 +36,30 @@ except:
 	highest_score=0
 
 def WelcomeScreen(): #initial screen before the game begins
-	global quit,game_state,invader1,invader2,invaderM,invader3
+	global quit,game_state
 	mouse_pos=pygame.mouse.get_pos()
 	mouse_click=pygame.mouse.get_pressed()
 	screen.fill(GREY)
 
 	logo = pygame.image.load('space-invaders-logo_transparent.png')
-	screen.blit(logo,(30,40))
-
-	screen.blit(invader1,(150,550))
-	points1 = font_points.render(':- 10 POINTS', False, BLUE)
-	screen.blit(points1,(200,550))
-	screen.blit(invader2,(450,550))
-	points1 = font_points.render(':- 20 POINTS', False, BLUE)
-	screen.blit(points1,(500,550))
-	screen.blit(invader3,(150,600))
-	points1 = font_points.render(':- 30 POINTS', False, BLUE)
-	screen.blit(points1,(200,600))
-	screen.blit(invaderM,(450,600))
-	points1 = font_points.render(':- Mystery (Hit Thrice)', False, BLUE)
-	screen.blit(points1,(500,600))
+	screen.blit(logo,(30,80))
 
 
-	if ((mouse_pos[0]-400)**2 + (mouse_pos[1]-400)**2) <=8100 :
-		pygame.draw.circle(screen, RED,(400,400),90)
+
+	if mouse_pos[0] < 535 and mouse_pos[0] > 270 and mouse_pos[1] < 480 and mouse_pos[1] > 400:
+		pygame.draw.rect(screen, RED,(270,400,265,80))
 		if mouse_click[0]:
-			game_state = 1
+			game_state = True
 			Game()
 			
 	else:
-		pygame.draw.circle(screen, BLUE,(400,400),90)
+		pygame.draw.rect(screen,BLUE,(270,400,265,80))
 
-	text_welcome = font_times.render('START', False, WHITE)
-	screen.blit(text_welcome,(340,360))
-	text_welcome = font_times.render('GAME', False, WHITE)
-	screen.blit(text_welcome,(340,400))
+	text_welcome = font_times.render('START GAME', False, WHITE)
+	screen.blit(text_welcome,(280,417))
 
 def Game(): #The game has begin... initialize all classes and display
-	global score,highest_score,ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4,invader1,invader2,invader3,invaderM,bullet,i1fire,i2fire,i3fire,i4fire,speed_invader1,speed_invader2,speed_invader3,speed_mys
+	global score,highest_score,ship,ship_y,ship_x,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys
 
 	background = pygame.image.load('background.png')
 	screen.blit(background,(0,0))
@@ -84,11 +69,6 @@ def Game(): #The game has begin... initialize all classes and display
 	screen.blit(text_score,(270,25))
 	text_score = font_comic.render('HIGH SCORE:', False, GOLD)
 	screen.blit(text_score,(430,25))
-	if highest_score<score:
-		highest_score=score
-		fo=open('highscore.txt','w')
-		fo.write(str(highest_score))
-		fo.close()
 	text_score = font_comic.render(str(highest_score), False, ORANGE)
 	screen.blit(text_score,(630,25))
 	Spaceship()
@@ -107,20 +87,19 @@ def Game(): #The game has begin... initialize all classes and display
 	if invader_mys.isAlive:
 			invader_mys.Get_Invader()
 	Move_Invader()
-	for obstructs in obstruct1:
-		if obstructs.isAlive:
-			obstructs.Obs()
-	for obstructs in obstruct2:
-		if obstructs.isAlive:
-			obstructs.Obs()
-	for obstructs in obstruct3:
-		if obstructs.isAlive:
-			obstructs.Obs()
-	for obstructs in obstruct4:
-		if obstructs.isAlive:
-			obstructs.Obs()
-	Reach_bottom()
-			
+	#display all objects 
+	pass
+
+class Bullet:
+	global ship_x,ship_y
+	def __init__(self,bullet):
+		self.bullet = bullet
+		self.bullet_x = ship_x + ship.get_width()/2
+		self.bullet_y = ship_y
+
+	def Get_Bullet(self):
+		screen.blit(self.bullet,(self.bullet_x,self.bullet_y))
+
 def Left_press(): #increase velocity
 	global vel_ship
 	vel_ship=-10
@@ -136,55 +115,19 @@ def Release_arrowkey(): #velocity=0
 	vel_ship=0
 	pass
 
-def Win_message(): ##Increase size of font and positioning correctly left
-	global quit
-	mouse=pygame.mouse.get_pos()
-	click=pygame.mouse.get_pressed()
-	screen.fill(GOLD)
-	myfont_win = pygame.font.SysFont('Comic Sans MS', 120)
-	col=random.choice((1,2,3))
-	if col==1:
-		textsurface=myfont_win.render("YOU WON..!!",False, BLUE)
-		screen.blit(textsurface,(190,200)) 
-	if col==2:
-		textsurface=myfont_win.render("YOU WON..!!",False, ORANGE)
-		screen.blit(textsurface,(190,200))
-	if col==3:
-		textsurface=myfont_win.render("YOU WON..!!",False, RED)
-		screen.blit(textsurface,(190,200))
-	if mouse[0] < 375 and mouse[0] > 200 and mouse[1] < 450 and mouse[1] > 400:
-		pygame.draw.rect(screen, GREEN,(200, 400,125,50))
-		if click[0]==1:
-			quit=True
-	else:
-		pygame.draw.rect(screen,RED,(200,400,125,50))   
-	textsurface = myfont.render('QUIT', False, WHITE)
-	screen.blit(textsurface,(220,410)) 
-
 def Fire_Spaceship(): #release a bullet from same x coordinate upwards
+	#the code of this is written in the main function only
+
+
 	pass
 
 def initial():
-	global ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4,invader1,invader2,invader3,invaderM,bullet,i1fire,i2fire,i3fire,i4fire,speed_invader1,speed_invader2,speed_invader3,speed_mys
+	global ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys
 	# Spaceship object and starting coordinates
-	ship = pygame.image.load('tank.png').convert_alpha()
-	ship_y = screen.get_height() - 70
+	ship = font_comic.render('Ship',False,GOLD) # This line has to modified to get spaceship object
+	ship_y = screen.get_height() - 50
 	ship_x = screen.get_width()/2 - ship.get_width()/2
 	vel_ship=0
-	# Invader Class
-	invader1 = pygame.image.load('i1.png').convert_alpha()
-	invader2 = pygame.image.load('i3.png').convert_alpha()  
-	invader3 = pygame.image.load('i2.png').convert_alpha()  
-	invaderM = pygame.image.load('i4.png').convert_alpha()
-	bullet = pygame.image.load('bullet.jpg')
-	i1fire = pygame.image.load('i1fire.png')
-	i2fire = pygame.image.load('i2fire.png')
-	i3fire = pygame.image.load('i3fire.png')
-	i4fire = pygame.image.load('i4fire.png')
-	speed_invader1 = 2
-	speed_invader2 = -3
-	speed_invader3 = 3
-	speed_mys = 8
 	##Initalise invaders
 	invader1a_list=[Invader1(invader1,i,300) for i in range(200,650,50)]
 	invader1b_list=[Invader1(invader1,i,265) for i in range(200,650,50)]
@@ -192,22 +135,25 @@ def initial():
 	invader2_list=[Invader2(invader2,i,185) for i in range(220,590,40)]
 	invader3_list=[Invader3(invader3,i,140) for i in range(220,590,40)]
 	invader_mys=Invader_Mystery(invaderM,380,100)
-	obstruct1 = [Obstruct(100+i,500+j) for j in range(0,30,10) for i in range (0,50,10)]
-	obstruct2 = [Obstruct(300+i,500+j) for j in range(0,30,10) for i in range (0,50,10)]
-	obstruct3 = [Obstruct(500+i,500+j) for j in range(0,30,10) for i in range (0,50,10)]
-	obstruct4 = [Obstruct(700+i,500+j) for j in range(0,30,10) for i in range (0,50,10)]
+
 
 # Function to change positon and display Spaceship
 def Spaceship():
 	global vel_ship,ship,ship_y,ship_x
 	ship_x+=vel_ship
-	if ship_x <= 0 + 5: #stop if hits left wall
+	if ship_x <= 0 + ship.get_width()/2: #stop if hits left wall
 		ship_x-=vel_ship
 		vel_ship=0
-	if ship_x >= 800 - ship.get_width(): #stop if hits right wall
+	if ship_x >= 800 - ship.get_width()/2: #stop if hits right wall
 		ship_x-=vel_ship
 		vel_ship=0
 	screen.blit(ship,(ship_x,ship_y))
+
+# Invader Class
+invader1 = font_comic.render('I1',False,RED) # This line to be replaced by Invader image
+invader2 = font_comic.render('I2',False,GREY) # This line to be replaced by Invader image
+invader3 = font_comic.render('I3',False,BLUE) # This line to be replaced by Invader image
+invaderM = font_comic.render('I3',False,BLUE)
 
 class Invader1: #score=10
 	global score
@@ -272,17 +218,11 @@ class Invader_Mystery: #needs to be attacked thrice to be killed and score =100
 			self.isAlive = False 
 			score += 100
 
-class Bullet:
-	global ship_x,ship_y
-	def __init__(self,bullet):
-		self.bullet = bullet
-		self.bullet_x = ship_x + ship.get_width()/2
-		self.bullet_y = ship_y
-
-	def Get_Bullet(self):
-		screen.blit(self.bullet,(self.bullet_x,self.bullet_y))
-
 # Invader Movement Function
+speed_invader1 = 2
+speed_invader2 = -3
+speed_invader3 = 3
+speed_mys = 8
 def Move_Invader():
 	global invader1a_list,invader2_list,invader1b_list,invader1c_list,invader3_list,invader_mys,speed_invader1,speed_invader2,speed_mys,speed_invader3
 	
@@ -299,7 +239,7 @@ def Move_Invader():
 		else:
 			right -= 1
 
-	if (invader1a_list[right].invader_x >= 750 or invader1a_list[left].invader_x <= 15) :
+	if (invader1a_list[right].invader_x >= 750 or invader1a_list[left].invader_x <= 50) :
 		speed_invader1 *= -1.05
 	for invaders in invader1a_list:
 		invaders.invader_x += speed_invader1
@@ -324,7 +264,7 @@ def Move_Invader():
 		else:
 			right -= 1
 
-	if (invader2_list[right].invader_x >= 750 or invader2_list[left].invader_x <= 15) :
+	if (invader2_list[right].invader_x >= 750 or invader2_list[left].invader_x <= 50) :
 		speed_invader2 *= -1.03
 	for invaders in invader2_list:
 		invaders.invader_x += speed_invader2
@@ -343,70 +283,27 @@ def Move_Invader():
 		else:
 			right -= 1
 
-	if (invader3_list[right].invader_x >= 750 or invader3_list[left].invader_x <= 15) :
+	if (invader3_list[right].invader_x >= 750 or invader3_list[left].invader_x <= 50) :
 		speed_invader3 *= -1.03
 	for invaders in invader3_list:
 		invaders.invader_x += speed_invader3
 		invaders.invader_y += 0.13
 
-	if (invader_mys.invader_x >= 740 or invader_mys.invader_x <=15 ):
+	if (invader_mys.invader_x >= 750 or invader_mys.invader_x <=50 ):
 		speed_mys *= -1.01
 	invader_mys.invader_x += speed_mys
 	invader_mys.invader_y += 0.1
 
-class Obstruct:
-	def __init__(self,x,y):
-		self.x = x
-		self.y = y
-		self.isAlive = True
-
-	def Obs(self):
-		pygame.draw.rect(screen,GREY,(self.x,self.y,10,10))
-		for i in range (0,4):
-			pygame.draw.line(screen,BLACK,(self.x,self.y+2*(i+1)),(self.x+10,self.y+2*(i+1)))
-			pygame.draw.line(screen,BLACK,(self.x+2*(i+1),self.y),(self.x+2*(i+1),self.y+10))
-	def Obs_Attack():
-		self.isAlive = False
-
-def Reach_bottom():
-	global game_state
-	for invader in invader1a_list:
-		if invader.isAlive and (invader.invader_y>450):
-			game_state=2
-			return False
-	for invader in invader1b_list:
-		if invader.isAlive and (invader.invader_y>450):
-			game_state=2
-			return False
-	for invader in invader1c_list:
-		if invader.isAlive and (invader.invader_y>450):
-			game_state=2
-			return False
-	for invader in invader2_list:
-		if invader.isAlive and (invader.invader_y>450):
-			game_state=2
-			return False
-	for invader in invader3_list:
-		if invader.isAlive and (invader.invader_y>450):
-			game_state=2
-			return False
-	if invader_mys.isAlive and (invader_mys.invader_y>410):
-		game_state =2
-
-
 ##MAIN
-initial()
 WelcomeScreen() ## contains initial screen
-## game state=0 means start page... =1 means game is going on... =2 means game lost... =3 means won the game
-game_state=0 
+game_state=False
 quit=False
+initial()
 while not quit:
 	if not game_state:
 		WelcomeScreen()
-	elif game_state==1:
+	else:
 		Game()
-	elif game_state == 2:
-		Game_Over()
 
 	for event in pygame.event.get(): 
 		if event.type == pygame.KEYDOWN:
@@ -420,10 +317,15 @@ while not quit:
 				Release_arrowkey()
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_SPACE:
-				Fire_Spaceship()
+				shoot_y=ship_y
+				shoot_x=ship_x + ship.get_width()/2
 		if event.type == pygame.QUIT:
 			quit = True
-	
+	if shoot_y>0:
+		screen.blit(shot,(shoot_x,shoot_y))
+		shoot_y-=10
+
+    
 	clock.tick(20) #Sets FPS of the game
 	pygame.display.update()
 
