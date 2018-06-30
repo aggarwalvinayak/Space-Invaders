@@ -126,6 +126,7 @@ def Game(): #The game has begin... initialize all classes and display
 		if bullet1.bullet_y<= 50:
 			bullet1.isAlive=False
 	firebyinvader()
+	checkhit_invader()
 
 
 			
@@ -224,7 +225,7 @@ def firebyinvader():
 
 
 def initial():
-	global ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4,invader1,invader2,invader3,invaderM,bullet,i1fire,i2fire,i3fire,i4fire,speed_invader1,speed_invader2,speed_invader3,speed_mys,bullet1,score
+	global ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4,invader1,invader2,invader3,invaderM,bullet,i1fire,i2fire,i3fire,i4fire,speed_invader1,speed_invader2,speed_invader3,speed_mys,bullet1,score,fire_alive
 	# Spaceship object and starting coordinates
 	score=0
 	ship = pygame.image.load('tank.png').convert_alpha()
@@ -512,6 +513,30 @@ def Check_hit():
 				if bullet1.bullet_x+3 >= obstructs.x and bullet1.bullet_x+3 <= obstructs.x + 10 and bullet1.bullet_y+9 >= obstructs.y and bullet1.bullet_y+3 <= obstructs.y + 10:
 					bullet1.isAlive = False
 					obstructs.isAlive = False
+def checkhit_invader():
+	global fire_alive
+	if fire_alive==True:
+		for obstructs in obstruct1:
+			if obstructs.isAlive:
+				if fire_x+3 >= obstructs.x and fire_x+3 <= obstructs.x + 10 and fire_y+9 >= obstructs.y and fire_y+3 <= obstructs.y + 10:
+					fire_alive = False
+					obstructs.isAlive = False
+		for obstructs in obstruct2:
+			if obstructs.isAlive:
+				if fire_x+3 >= obstructs.x and fire_x+3 <= obstructs.x + 10 and fire_y+9 >= obstructs.y and fire_y+3 <= obstructs.y + 10:
+					fire_alive = False
+					obstructs.isAlive = False
+		for obstructs in obstruct3:
+			if obstructs.isAlive:
+				if fire_x+3 >= obstructs.x and fire_x+3 <= obstructs.x + 10 and fire_y+9 >= obstructs.y and fire_y+3 <= obstructs.y + 10:
+					fire_alive = False
+					obstructs.isAlive = False
+		for obstructs in obstruct4:
+			if obstructs.isAlive:
+				if fire_x+3 >= obstructs.x and fire_x+3 <= obstructs.x + 10 and fire_y+9 >= obstructs.y and fire_y+3 <= obstructs.y + 10:
+					fire_alive = False
+					obstructs.isAlive = False
+
 
 
 ##MAIN
