@@ -219,7 +219,7 @@ def firebyinvader():
 
 	screen.blit(fire,(fire_x,fire_y))
 	fire_y+=7
-	if fire_y >= ship_y:
+	if fire_y > ship_y+5:
 		fire_alive=False
 
 
@@ -514,7 +514,7 @@ def Check_hit():
 					bullet1.isAlive = False
 					obstructs.isAlive = False
 def checkhit_invader():
-	global fire_alive
+	global fire_alive,game_state
 	if fire_alive==True:
 		for obstructs in obstruct1:
 			if obstructs.isAlive:
@@ -536,6 +536,10 @@ def checkhit_invader():
 				if fire_x+3 >= obstructs.x and fire_x+3 <= obstructs.x + 10 and fire_y+9 >= obstructs.y and fire_y+3 <= obstructs.y + 10:
 					fire_alive = False
 					obstructs.isAlive = False
+
+		if (ship_x-5 < fire_x < ship_x + ship.get_width()-5) and (fire_y > ship_y):
+			game_state=2
+			Game_end()
 
 
 
