@@ -149,7 +149,8 @@ def Game_end(): ##Increase size of font and positioning correctly left
 	mouse=pygame.mouse.get_pos()
 	click=pygame.mouse.get_pressed()
 	screen.fill(GOLD)
-	myfont_win = pygame.font.SysFont('Comic Sans MS', 120)
+	myfont_win = pygame.font.SysFont('Comic Sans MS', 100)
+	myfont_quit = pygame.font.SysFont('Comic Sans MS', 40)
 	col=random.choice((1,2,3))
 	if game_state==2:
 		game_endtext='YOU LOST <_>..!!'
@@ -157,21 +158,21 @@ def Game_end(): ##Increase size of font and positioning correctly left
 		game_endtext='YOU WONNN <_>..!!'
 	if col==1:
 		textsurface=myfont_win.render(str(game_endtext),False, BLUE)
-		screen.blit(textsurface,(190,200)) 
+		screen.blit(textsurface,(20,200)) 
 	if col==2:
 		textsurface=myfont_win.render(str(game_endtext),False, ORANGE)
-		screen.blit(textsurface,(190,200))
+		screen.blit(textsurface,(20,200))
 	if col==3:
 		textsurface=myfont_win.render(str(game_endtext),False, RED)
-		screen.blit(textsurface,(190,200))
+		screen.blit(textsurface,(20,200))
 	if mouse[0] < 375 and mouse[0] > 200 and mouse[1] < 450 and mouse[1] > 400:
 		pygame.draw.rect(screen, GREEN,(200, 400,125,50))
 		if click[0]==1:
 			quit=True
 	else:
 		pygame.draw.rect(screen,RED,(200,400,125,50))   
-	textsurface = myfont.render('QUIT', False, WHITE)
-	screen.blit(textsurface,(220,410)) 
+	textsurface = myfont_quit.render('QUIT', False, WHITE)
+	screen.blit(textsurface,(210,395)) 
 	if game_state == 3:
 		if mouse[0] < 650 and mouse[0] > 430 and mouse[1] < 450 and mouse[1] > 400:
 			pygame.draw.rect(screen, GREEN,(410,400,220,50))
@@ -436,18 +437,19 @@ def Check_hit():
 					bullet1.isAlive = False
 					invader1a_list[i].Invader_Attack()
 			if invader1b_list[i].isAlive:
-				if bullet1.bullet_x+3 >= invader1a_list[i].invader_x and bullet1.bullet_x+3 <= invader1a_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader1a_list[i].invader_y and bullet1.bullet_y+9 <= invader1a_list[i].invader_y + 26:
+				if bullet1.bullet_x+3 >= invader1b_list[i].invader_x and bullet1.bullet_x+3 <= invader1b_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader1a_list[i].invader_y and bullet1.bullet_y+9 <= invader1a_list[i].invader_y + 26:
 					bullet1.isAlive = False
-					invader1a_list[i].Invader_Attack()
+					invader1b_list[i].Invader_Attack()
 			if invader1c_list[i].isAlive:
-				if bullet1.bullet_x+3 >= invader1a_list[i].invader_x and bullet1.bullet_x+3 <= invader1a_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader1a_list[i].invader_y and bullet1.bullet_y+9 <= invader1a_list[i].invader_y + 26:
+				if bullet1.bullet_x+3 >= invader1c_list[i].invader_x and bullet1.bullet_x+3 <= invader1c_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader1a_list[i].invader_y and bullet1.bullet_y+9 <= invader1a_list[i].invader_y + 26:
 					bullet1.isAlive = False
-					invader1a_list[i].Invader_Attack()
+					invader1c_list[i].Invader_Attack()
 		for i in range(len(invader2_list)):
 			if invader2_list[i].isAlive:	
 				if bullet1.bullet_x+3 >= invader2_list[i].invader_x and bullet1.bullet_x+3 <= invader2_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader2_list[i].invader_y and bullet1.bullet_y+9 <= invader2_list[i].invader_y + 26:
 					bullet1.isAlive = False
 					invader2_list[i].Invader_Attack()
+		for i in range(len(invader3_list)):
 			if invader3_list[i].isAlive:
 				if bullet1.bullet_x+3 >= invader3_list[i].invader_x and bullet1.bullet_x+3 <= invader3_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader3_list[i].invader_y and bullet1.bullet_y+9 <= invader3_list[i].invader_y + 26:
 					bullet1.isAlive = False
