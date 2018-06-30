@@ -127,6 +127,7 @@ def Game(): #The game has begin... initialize all classes and display
 			bullet1.isAlive=False
 	firebyinvader()
 	checkhit_invader()
+	check_win()
 
 
 			
@@ -159,16 +160,16 @@ def Game_end(): ##Increase size of font and positioning correctly left
 	if game_state==2:
 		game_endtext='YOU LOST <_>..!!'
 	if game_state == 3:
-		game_endtext='YOU WONNN <_>..!!'
+		game_endtext='YOU WONN <_>!!'
 	if col==1:
 		textsurface=myfont_win.render(str(game_endtext),False, BLUE)
-		screen.blit(textsurface,(70,200)) 
+		screen.blit(textsurface,(60,200)) 
 	if col==2:
 		textsurface=myfont_win.render(str(game_endtext),False, ORANGE)
-		screen.blit(textsurface,(70,200))
+		screen.blit(textsurface,(60,200))
 	if col==3:
 		textsurface=myfont_win.render(str(game_endtext),False, RED)
-		screen.blit(textsurface,(70,200))
+		screen.blit(textsurface,(60,200))
 	if mouse[0] < 375 and mouse[0] > 200 and mouse[1] < 450 and mouse[1] > 400:
 		pygame.draw.rect(screen, GREEN,(200, 400,125,50))
 		if click[0]==1:
@@ -233,6 +234,26 @@ def firebyinvader():
 	if fire_y > ship_y+5:
 		fire_alive=False
 
+def check_win():
+	global game_state
+	flag=1
+	for i in range(len(invader1a_list)):
+		if invader1a_list[i].isAlive:
+			return True
+		if invader1b_list[i].isAlive:
+			return True
+		if invader1c_list[i].isAlive:
+			return True
+	for i in range(len(invader2_list)):
+		if invader2_list[i].isAlive:	
+			return True
+		if invader3_list[i].isAlive:
+			return True
+	if invader_mys.isAlive:
+			return True
+	if flag == 1:
+		game_state = 3
+		return False
 
 
 def initial():
@@ -296,7 +317,7 @@ class Invader1: #score=10
 		self.invader1 = invader1
 		self.invader_x = invader_x
 		self.invader_y = invader1_y
-		self.isAlive = True
+		self.isAlive = False
 	
 	def Get_Invader(self):
 		screen.blit(self.invader1,(self.invader_x,self.invader_y))
