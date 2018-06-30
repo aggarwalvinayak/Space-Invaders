@@ -27,7 +27,6 @@ pygame.display.set_caption('SPACE INVADER')
 clock = pygame.time.Clock()
 
 score=0
-
 try:
 	file_highscore=open("highscore.txt",'r') #reads highscore from text file
 	file_highscore.seek(0,0)
@@ -74,7 +73,7 @@ def WelcomeScreen(): #initial screen before the game begins
 	screen.blit(text_welcome,(340,400))
 
 def Game(): #The game has begin... initialize all classes and display
-	global score,highest_score,ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4,invader1,invader2,invader3,invaderM,bullet,i1fire,i2fire,i3fire,i4fire,speed_invader1,speed_invader2,speed_invader3,speed_mys,bullet1,vel_bull
+	global score,highest_score,ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4,invader1,invader2,invader3,invaderM,bullet,i1fire,i2fire,i3fire,i4fire,speed_invader1,speed_invader2,speed_invader3,speed_mys,bullet1,vel_bull,fire_alive
 
 	background = pygame.image.load('background.png')
 	screen.blit(background,(0,0))
@@ -124,8 +123,9 @@ def Game(): #The game has begin... initialize all classes and display
 	if bullet1.isAlive:
 		bullet1.bullet_y+=vel_bull
 		bullet1.Get_Bullet()
-		if bullet1.bullet_y<= 100:
+		if bullet1.bullet_y<= 50:
 			bullet1.isAlive=False
+	firebyinvader()
 
 
 			
@@ -149,8 +149,7 @@ def Game_end(): ##Increase size of font and positioning correctly left
 	mouse=pygame.mouse.get_pos()
 	click=pygame.mouse.get_pressed()
 	screen.fill(GOLD)
-	myfont_win = pygame.font.SysFont('Comic Sans MS', 100)
-	myfont_quit = pygame.font.SysFont('Comic Sans MS', 40)
+	myfont_win = pygame.font.SysFont('Comic Sans MS', 120)
 	col=random.choice((1,2,3))
 	if game_state==2:
 		game_endtext='YOU LOST <_>..!!'
@@ -158,21 +157,21 @@ def Game_end(): ##Increase size of font and positioning correctly left
 		game_endtext='YOU WONNN <_>..!!'
 	if col==1:
 		textsurface=myfont_win.render(str(game_endtext),False, BLUE)
-		screen.blit(textsurface,(20,200)) 
+		screen.blit(textsurface,(190,200)) 
 	if col==2:
 		textsurface=myfont_win.render(str(game_endtext),False, ORANGE)
-		screen.blit(textsurface,(20,200))
+		screen.blit(textsurface,(190,200))
 	if col==3:
 		textsurface=myfont_win.render(str(game_endtext),False, RED)
-		screen.blit(textsurface,(20,200))
+		screen.blit(textsurface,(190,200))
 	if mouse[0] < 375 and mouse[0] > 200 and mouse[1] < 450 and mouse[1] > 400:
 		pygame.draw.rect(screen, GREEN,(200, 400,125,50))
 		if click[0]==1:
 			quit=True
 	else:
 		pygame.draw.rect(screen,RED,(200,400,125,50))   
-	textsurface = myfont_quit.render('QUIT', False, WHITE)
-	screen.blit(textsurface,(210,395)) 
+	textsurface = myfont.render('QUIT', False, WHITE)
+	screen.blit(textsurface,(220,410)) 
 	if game_state == 3:
 		if mouse[0] < 650 and mouse[0] > 430 and mouse[1] < 450 and mouse[1] > 400:
 			pygame.draw.rect(screen, GREEN,(410,400,220,50))
@@ -195,13 +194,44 @@ def Fire_Spaceship(): #release a bullet from same x coordinate upwards
 		vel_bull=-15
 	pass
 
+def firebyinvader():
+	global i1fire,i2fire,i3fire,i4fire,fire_alive,fire,fire_y,shooter,fire_x
+	shot = [i1fire,i2fire,i3fire,i4fire]
+	if fire_alive == False:
+		fire = random.choice(shot)
+		fire_alive = True
+		if fire == i1fire:
+			shooter = random.choice(invader1b_list)
+			fire_y=shooter.invader_y
+			fire_x=shooter.invader_x
+		elif fire == i2fire:
+			shooter = random.choice(invader3_list)
+			fire_y=shooter.invader_y
+			fire_x=shooter.invader_x
+		elif fire == i3fire:
+			shooter = random.choice(invader2_list)
+			fire_y=shooter.invader_y
+			fire_x=shooter.invader_x
+		else:
+			shooter = invader_mys
+			fire_y=shooter.invader_y
+			fire_x=shooter.invader_x
+
+	screen.blit(fire,(fire_x,fire_y))
+	fire_y+=7
+	if fire_y >= ship_y:
+		fire_alive=False
+
+
+
 def initial():
-	global ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4,invader1,invader2,invader3,invaderM,bullet,i1fire,i2fire,i3fire,i4fire,speed_invader1,speed_invader2,speed_invader3,speed_mys,bullet1
-	# Spaceship object and starting coordinates
+	global ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4,invader1,invader2,invader3,invaderM,bullet,i1fire,i2fire,i3fire,i4fire,speed_invader1,speed_invader2,speed_invader3,speed_mys,bullet1,fire_alive
+	   # Spaceship object and starting coordinates
 	ship = pygame.image.load('tank.png').convert_alpha()
 	ship_y = screen.get_height() - 70
 	ship_x = screen.get_width()/2 - ship.get_width()/2
 	vel_ship=0
+	fire_alive = False
 	# Invader Class
 	invader1 = pygame.image.load('i1.png').convert_alpha()
 	invader2 = pygame.image.load('i3.png').convert_alpha()  
@@ -213,6 +243,10 @@ def initial():
 	i4fire = pygame.image.load('i4fire.png')
 	bullet = pygame.image.load('bullet.jpg')
 	bullet1 = Bullet(bullet)
+	bullet2 = Bullet(i1fire)
+	bullet3 = Bullet(i2fire)
+	bullet4 = Bullet(i3fire)
+	bullet5 = Bullet(i4fire)
 	speed_invader1 = 2
 	speed_invader2 = -3
 	speed_invader3 = 3
@@ -437,19 +471,18 @@ def Check_hit():
 					bullet1.isAlive = False
 					invader1a_list[i].Invader_Attack()
 			if invader1b_list[i].isAlive:
-				if bullet1.bullet_x+3 >= invader1b_list[i].invader_x and bullet1.bullet_x+3 <= invader1b_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader1a_list[i].invader_y and bullet1.bullet_y+9 <= invader1a_list[i].invader_y + 26:
+				if bullet1.bullet_x+3 >= invader1a_list[i].invader_x and bullet1.bullet_x+3 <= invader1a_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader1a_list[i].invader_y and bullet1.bullet_y+9 <= invader1a_list[i].invader_y + 26:
 					bullet1.isAlive = False
-					invader1b_list[i].Invader_Attack()
+					invader1a_list[i].Invader_Attack()
 			if invader1c_list[i].isAlive:
-				if bullet1.bullet_x+3 >= invader1c_list[i].invader_x and bullet1.bullet_x+3 <= invader1c_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader1a_list[i].invader_y and bullet1.bullet_y+9 <= invader1a_list[i].invader_y + 26:
+				if bullet1.bullet_x+3 >= invader1a_list[i].invader_x and bullet1.bullet_x+3 <= invader1a_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader1a_list[i].invader_y and bullet1.bullet_y+9 <= invader1a_list[i].invader_y + 26:
 					bullet1.isAlive = False
-					invader1c_list[i].Invader_Attack()
+					invader1a_list[i].Invader_Attack()
 		for i in range(len(invader2_list)):
 			if invader2_list[i].isAlive:	
 				if bullet1.bullet_x+3 >= invader2_list[i].invader_x and bullet1.bullet_x+3 <= invader2_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader2_list[i].invader_y and bullet1.bullet_y+9 <= invader2_list[i].invader_y + 26:
 					bullet1.isAlive = False
 					invader2_list[i].Invader_Attack()
-		for i in range(len(invader3_list)):
 			if invader3_list[i].isAlive:
 				if bullet1.bullet_x+3 >= invader3_list[i].invader_x and bullet1.bullet_x+3 <= invader3_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader3_list[i].invader_y and bullet1.bullet_y+9 <= invader3_list[i].invader_y + 26:
 					bullet1.isAlive = False
