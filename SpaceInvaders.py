@@ -146,7 +146,7 @@ def Release_arrowkey(): #velocity=0
 	pass
 
 def Game_end(): ##Increase size of font and positioning correctly left
-	global quit,game_state
+	global quit,game_state,font_comic
 	mouse=pygame.mouse.get_pos()
 	click=pygame.mouse.get_pressed()
 	screen.fill(GOLD)
@@ -158,20 +158,20 @@ def Game_end(): ##Increase size of font and positioning correctly left
 		game_endtext='YOU WONNN <_>..!!'
 	if col==1:
 		textsurface=myfont_win.render(str(game_endtext),False, BLUE)
-		screen.blit(textsurface,(100,200)) 
+		screen.blit(textsurface,(70,200)) 
 	if col==2:
 		textsurface=myfont_win.render(str(game_endtext),False, ORANGE)
-		screen.blit(textsurface,(100,200))
+		screen.blit(textsurface,(70,200))
 	if col==3:
 		textsurface=myfont_win.render(str(game_endtext),False, RED)
-		screen.blit(textsurface,(100,200))
+		screen.blit(textsurface,(70,200))
 	if mouse[0] < 375 and mouse[0] > 200 and mouse[1] < 450 and mouse[1] > 400:
 		pygame.draw.rect(screen, GREEN,(200, 400,125,50))
 		if click[0]==1:
 			quit=True
 	else:
 		pygame.draw.rect(screen,RED,(200,400,125,50))   
-	textsurface = myfont_quit.render('QUIT', False, WHITE)
+	textsurface = font_comic.render('QUIT', False, WHITE)
 	screen.blit(textsurface,(222,410)) 
 	if mouse[0] < 650 and mouse[0] > 430 and mouse[1] < 450 and mouse[1] > 400:
 		pygame.draw.rect(screen, GREEN,(410,400,220,50))
@@ -181,7 +181,7 @@ def Game_end(): ##Increase size of font and positioning correctly left
 			Game()
 	else:
 		pygame.draw.rect(screen,BLUE,(410,400,220,50))   
-	textsurface = myfont_quit.render('PLAY AGAIN', False, WHITE)
+	textsurface = font_comic.render('PLAY AGAIN', False, WHITE)
 	screen.blit(textsurface,(435,412))
 
 def Fire_Spaceship(): #release a bullet from same x coordinate upwards
@@ -474,11 +474,11 @@ def Check_hit():
 			if invader1b_list[i].isAlive:
 				if bullet1.bullet_x+3 >= invader1b_list[i].invader_x and bullet1.bullet_x+3 <= invader1b_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader1b_list[i].invader_y and bullet1.bullet_y+9 <= invader1b_list[i].invader_y + 26:
 					bullet1.isAlive = False
-					invader1a_list[i].Invader_Attack()
+					invader1b_list[i].Invader_Attack()
 			if invader1c_list[i].isAlive:
-				if bullet1.bullet_x+3 >= invader1c_list[i].invader_x and bullet1.bullet_x+3 <= invader1c_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader1c_list[i].invader_y and bullet1.bullet_y+9 <= invader1c_list[i].invader_y + 26:
+				if bullet1.bullet_x+3 >= invader1c_list[i].invader_x and bullet1.bullet_x+3 <= invader1c_list[i].invader_x + 26 and bullet1.bullet_y+9 >= invader1c_list[i].invader_y and bullet1.bullet_y+9 <= invader1c_list[i].invader_y + 35:
 					bullet1.isAlive = False
-					invader1a_list[i].Invader_Attack()
+					invader1c_list[i].Invader_Attack()
 		for i in range(len(invader2_list)):
 			if invader2_list[i].isAlive:	
 				if bullet1.bullet_x+3 >= invader2_list[i].invader_x and bullet1.bullet_x+3 <= invader2_list[i].invader_x + 35 and bullet1.bullet_y+9 >= invader2_list[i].invader_y and bullet1.bullet_y+9 <= invader2_list[i].invader_y + 24:
@@ -537,7 +537,7 @@ def checkhit_invader():
 					fire_alive = False
 					obstructs.isAlive = False
 
-		if (ship_x-5 < fire_x < ship_x + ship.get_width()-5) and (fire_y > ship_y):
+		if (ship_x < fire_x and fire_x < ship_x + ship.get_width()-2) and (fire_y > ship_y):
 			game_state=2
 			Game_end()
 
