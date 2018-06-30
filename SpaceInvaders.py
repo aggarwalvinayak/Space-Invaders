@@ -151,6 +151,10 @@ def Game_end(): ##Increase size of font and positioning correctly left
 	click=pygame.mouse.get_pressed()
 	screen.fill(GOLD)
 	myfont_win = pygame.font.SysFont('Comic Sans MS', 120)
+	textsuface = font_comic.render('SCORE:',False,WHITE)
+	screen.blit(textsuface,(300,100))
+	textsuface = font_comic.render(str(score), False, WHITE)
+	screen.blit(textsuface, (450, 100))
 	col=random.choice((1,2,3))
 	if game_state==2:
 		game_endtext='YOU LOST <_>..!!'
