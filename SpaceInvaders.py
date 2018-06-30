@@ -3,7 +3,6 @@ import time
 import random
 from pygame.locals import *
 
-
 #Initialze pygame
 pygame.init()
 
@@ -128,8 +127,6 @@ def Game(): #The game has begin... initialize all classes and display
 	firebyinvader()
 	checkhit_invader()
 	check_win()
-
-
 			
 def Left_press(): #increase velocity
 	global vel_ship
@@ -255,7 +252,6 @@ def check_win():
 		game_state = 3
 		return False
 
-
 def initial():
 	global ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4,invader1,invader2,invader3,invaderM,bullet,i1fire,i2fire,i3fire,i4fire,speed_invader1,speed_invader2,speed_invader3,speed_mys,bullet1,score,fire_alive,invader1_list
 	# Spaceship object and starting coordinates
@@ -299,7 +295,6 @@ def initial():
 	obstruct2 = [Obstruct(300+i,500+j) for j in range(0,30,10) for i in range (0,50,10)]
 	obstruct3 = [Obstruct(500+i,500+j) for j in range(0,30,10) for i in range (0,50,10)]
 	obstruct4 = [Obstruct(700+i,500+j) for j in range(0,30,10) for i in range (0,50,10)]
-
 # Function to change positon and display Spaceship
 def Spaceship():
 	global vel_ship,ship,ship_y,ship_x
@@ -317,7 +312,7 @@ class Invader1: #score=10
 		self.invader1 = invader1
 		self.invader_x = invader_x
 		self.invader_y = invader1_y
-		self.isAlive = False
+		self.isAlive = True
 	
 	def Get_Invader(self):
 		screen.blit(self.invader1,(self.invader_x,self.invader_y))
@@ -385,7 +380,6 @@ class Bullet:
 
 	def Get_Bullet(self):
 		screen.blit(self.bullet,(self.bullet_x,self.bullet_y))
-
 # Invader Movement Function
 def Move_Invader():
 	global invader1a_list,invader2_list,invader1b_list,invader1c_list,invader3_list,invader_mys,speed_invader1,speed_invader2,speed_mys,speed_invader3
@@ -571,6 +565,7 @@ def Check_hit():
 				if bullet1.bullet_x+3 >= obstructs.x and bullet1.bullet_x+3 <= obstructs.x + 10 and bullet1.bullet_y+9 >= obstructs.y and bullet1.bullet_y+3 <= obstructs.y + 10:
 					bullet1.isAlive = False
 					obstructs.isAlive = False
+
 def checkhit_invader():
 	global fire_alive,game_state
 	if fire_alive==True:
@@ -598,8 +593,6 @@ def checkhit_invader():
 		if (ship_x < fire_x and fire_x < ship_x + ship.get_width()-2) and (fire_y > ship_y):
 			game_state=2
 			Game_end()
-
-
 
 ##MAIN
 initial()
