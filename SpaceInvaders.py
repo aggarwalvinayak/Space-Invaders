@@ -437,11 +437,11 @@ def Check_hit():
 					bullet1.isAlive = False
 					invader1a_list[i].Invader_Attack()
 			if invader1b_list[i].isAlive:
-				if bullet1.bullet_x+3 >= invader1b_list[i].invader_x and bullet1.bullet_x+3 <= invader1b_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader1a_list[i].invader_y and bullet1.bullet_y+9 <= invader1a_list[i].invader_y + 26:
+				if bullet1.bullet_x+3 >= invader1b_list[i].invader_x and bullet1.bullet_x+3 <= invader1b_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader1b_list[i].invader_y and bullet1.bullet_y+9 <= invader1b_list[i].invader_y + 26:
 					bullet1.isAlive = False
 					invader1b_list[i].Invader_Attack()
 			if invader1c_list[i].isAlive:
-				if bullet1.bullet_x+3 >= invader1c_list[i].invader_x and bullet1.bullet_x+3 <= invader1c_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader1a_list[i].invader_y and bullet1.bullet_y+9 <= invader1a_list[i].invader_y + 26:
+				if bullet1.bullet_x+3 >= invader1c_list[i].invader_x and bullet1.bullet_x+3 <= invader1c_list[i].invader_x + 28 and bullet1.bullet_y+9 >= invader1c_list[i].invader_y and bullet1.bullet_y+9 <= invader1c_list[i].invader_y + 26:
 					bullet1.isAlive = False
 					invader1c_list[i].Invader_Attack()
 		for i in range(len(invader2_list)):
