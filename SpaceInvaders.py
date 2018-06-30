@@ -362,64 +362,86 @@ def Move_Invader():
 	right = -1
 	flag_left,flag_right = 1,1
 	while flag_left or flag_right: #to check the leftmost and rightmost alive row
-		if invader1a_list[left].isAlive or invader1b_list[left].isAlive or invader1c_list[left].isAlive:
-			flag_left=0
-		else:
-			left += 1
-		if invader1a_list[right].isAlive or invader1b_list[right].isAlive or invader1c_list[right].isAlive:
+		try:
+			if invader1a_list[left].isAlive or invader1b_list[left].isAlive or invader1c_list[left].isAlive:
+				flag_left=0
+			else:
+				left += 1
+			if invader1a_list[right].isAlive or invader1b_list[right].isAlive or invader1c_list[right].isAlive:
+				flag_right=0
+			else:
+				right -= 1
+		except:
 			flag_right=0
-		else:
-			right -= 1
+			flag_left=0
 
-	if (invader1a_list[right].invader_x >= 750 or invader1a_list[left].invader_x <= 15) :
-		speed_invader1 *= -1.05
-	for invaders in invader1a_list:
-		invaders.invader_x += speed_invader1
-		invaders.invader_y += 0.13
-	for invaders in invader1b_list:
-		invaders.invader_x += speed_invader1
-		invaders.invader_y += 0.13
-	for invaders in invader1c_list:
-		invaders.invader_x += speed_invader1
-		invaders.invader_y += 0.13
+	try:	
+		if (invader1a_list[right].invader_x >= 750 or invader1a_list[left].invader_x <= 15) :
+			speed_invader1 *= -1.05
+		for invaders in invader1a_list:
+			invaders.invader_x += speed_invader1
+			invaders.invader_y += 0.13
+		for invaders in invader1b_list:
+			invaders.invader_x += speed_invader1
+			invaders.invader_y += 0.13
+		for invaders in invader1c_list:
+			invaders.invader_x += speed_invader1
+			invaders.invader_y += 0.13
+	except:
+		pass
 
 	left = 0
 	right = -1
 	flag_left,flag_right = 1,1
 	while flag_left or flag_right: #to check the leftmost and rightmost alive row
-		if invader2_list[left].isAlive:
-			flag_left=0
-		else:
-			left += 1
-		if invader2_list[right].isAlive:
+		try:
+			if invader2_list[left].isAlive:
+				flag_left=0
+			else:
+				left += 1
+			if invader2_list[right].isAlive:
+				flag_right=0
+			else:
+				right -= 1
+		except:
 			flag_right=0
-		else:
-			right -= 1
+			flag_left=0
 
-	if (invader2_list[right].invader_x >= 750 or invader2_list[left].invader_x <= 15) :
-		speed_invader2 *= -1.03
-	for invaders in invader2_list:
-		invaders.invader_x += speed_invader2
-		invaders.invader_y += 0.13
+	try:	
+		if (invader2_list[right].invader_x >= 750 or invader2_list[left].invader_x <= 15) :
+			speed_invader2 *= -1.03
+		for invaders in invader2_list:
+			invaders.invader_x += speed_invader2
+			invaders.invader_y += 0.13
+	except:
+		pass
 
 	left = 0
 	right = -1
 	flag_left,flag_right = 1,1
 	while flag_left or flag_right: #to check the leftmost and rightmost alive row
-		if invader3_list[left].isAlive:
-			flag_left=0
-		else:
-			left += 1
-		if invader3_list[right].isAlive:
+		try:	
+			if invader3_list[left].isAlive:
+				flag_left=0
+			else:
+				left += 1
+			if invader3_list[right].isAlive:
+				flag_right=0
+			else:
+				right -= 1
+		except:
 			flag_right=0
-		else:
-			right -= 1
+			flag_left=0
 
-	if (invader3_list[right].invader_x >= 750 or invader3_list[left].invader_x <= 15) :
-		speed_invader3 *= -1.03
-	for invaders in invader3_list:
-		invaders.invader_x += speed_invader3
-		invaders.invader_y += 0.13
+	try:	
+		if (invader3_list[right].invader_x >= 750 or invader3_list[left].invader_x <= 15) :
+			speed_invader3 *= -1.03
+		for invaders in invader3_list:
+			invaders.invader_x += speed_invader3
+			invaders.invader_y += 0.13
+	except:
+			flag_right=0
+			flag_left=0
 
 	if (invader_mys.invader_x >= 740 or invader_mys.invader_x <=15 ):
 		speed_mys *= -1.01
@@ -465,7 +487,7 @@ def Reach_bottom():
 		if invader.isAlive and (invader.invader_y>450):
 			game_state=2
 			return False
-	if invader_mys.isAlive and (invader_mys.invader_y>410):
+	if invader_mys.isAlive and (invader_mys.invader_y>430):
 		game_state =2
 
 def Check_hit():
