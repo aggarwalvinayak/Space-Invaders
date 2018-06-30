@@ -203,23 +203,30 @@ def firebyinvader():
 	shot = [i1fire,i2fire,i3fire,i4fire]
 	if fire_alive == False:
 		fire = random.choice(shot)
-		fire_alive = True
 		if fire == i1fire:
-			shooter = random.choice(invader1b_list)
-			fire_y=shooter.invader_y
-			fire_x=shooter.invader_x
+			shooter = random.choice(invader1_list)
+			if shooter.isAlive:
+				fire_alive = True
+				fire_y=shooter.invader_y
+				fire_x=shooter.invader_x
 		elif fire == i2fire:
 			shooter = random.choice(invader3_list)
-			fire_y=shooter.invader_y
-			fire_x=shooter.invader_x
+			if shooter.isAlive:
+				fire_alive = True
+				fire_y=shooter.invader_y
+				fire_x=shooter.invader_x
 		elif fire == i3fire:
 			shooter = random.choice(invader2_list)
-			fire_y=shooter.invader_y
-			fire_x=shooter.invader_x
+			if shooter.isAlive:
+				fire_alive = True
+				fire_y=shooter.invader_y
+				fire_x=shooter.invader_x
 		else:
 			shooter = invader_mys
-			fire_y=shooter.invader_y
-			fire_x=shooter.invader_x
+			if shooter.isAlive:
+				fire_alive = True
+				fire_y=shooter.invader_y
+				fire_x=shooter.invader_x
 
 	screen.blit(fire,(fire_x,fire_y))
 	fire_y+=7
@@ -229,7 +236,7 @@ def firebyinvader():
 
 
 def initial():
-	global ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4,invader1,invader2,invader3,invaderM,bullet,i1fire,i2fire,i3fire,i4fire,speed_invader1,speed_invader2,speed_invader3,speed_mys,bullet1,score,fire_alive
+	global ship,ship_x,ship_y,vel_ship,invader1a_list,invader1b_list,invader1c_list,invader2_list,invader3_list,invader_mys,obstruct1,obstruct2,obstruct3,obstruct4,invader1,invader2,invader3,invaderM,bullet,i1fire,i2fire,i3fire,i4fire,speed_invader1,speed_invader2,speed_invader3,speed_mys,bullet1,score,fire_alive,invader1_list
 	# Spaceship object and starting coordinates
 	score=0
 	ship = pygame.image.load('tank.png').convert_alpha()
@@ -257,9 +264,13 @@ def initial():
 	speed_invader3 = 3
 	speed_mys = 8
 	##Initalise invaders
+	invader1_list=[]
 	invader1a_list=[Invader1(invader1,i,300) for i in range(200,650,50)]
 	invader1b_list=[Invader1(invader1,i,265) for i in range(200,650,50)]
 	invader1c_list=[Invader1(invader1,i,230) for i in range(200,650,50)]
+	invader1_list.extend(invader1a_list)
+	invader1_list.extend(invader1b_list)
+	invader1_list.extend(invader1c_list)
 	invader2_list=[Invader2(invader2,i,185) for i in range(220,680,50)]
 	invader3_list=[Invader3(invader3,i,140) for i in range(220,590,40)]
 	invader_mys=Invader_Mystery(invaderM,380,100)
